@@ -1,22 +1,22 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyCUuls2IFlO1N_leHAjlKcPFkiM0ULwIG8",
-  authDomain: "anonymous-portal-62fea.firebaseapp.com",
-  projectId: "anonymous-portal-62fea",
-  storageBucket: "anonymous-portal-62fea.firebasestorage.app",
-  messagingSenderId: "159078481452",
-  appId: "1:159078481452:web:35ca1b76245adb43ccdb89",
-  measurementId: "G-JYYJT87ERN"
+  apiKey: "AIzaSyAS0N32VW0Z_FT-LAo-9YA6g1VkheZqqGU",
+  authDomain: "grivence-by-codewave.firebaseapp.com",
+  projectId: "grivence-by-codewave",
+  storageBucket: "grivence-by-codewave.firebasestorage.app",
+  messagingSenderId: "1080190479502",
+  appId: "1:1080190479502:web:bd6c541c567f806d382ddf",
+  measurementId: "G-8FHZ033TL7"
 };
 // Firebase App Check SDK লিঙ্কে index.html এ থাকা নিশ্চিত করুন
 // index.html এ <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app-check.js"></script> দিন
 
-const appCheck = firebase.appCheck();
+// const appCheck = firebase.appCheck();
 
-// Billing ছাড়া reCAPTCHA v3 ব্যবহারের জন্য activation
-appCheck.activate(
-    '6Ley-DwsAAAAAML-QM9nYZ86Q747NmQrv8h5yHwT', // আপনার প্রাপ্ত Site Key এখানে বসান
-    true // auto-refresh tokens enabled
-);
+// // Billing ছাড়া reCAPTCHA v3 ব্যবহারের জন্য activation
+// appCheck.activate(
+//     '6Ley-DwsAAAAAML-QM9nYZ86Q747NmQrv8h5yHwT', // আপনার প্রাপ্ত Site Key এখানে বসান
+//     true // auto-refresh tokens enabled
+// );
 
 // Firebase Initialize kora holo
 if (!firebase.apps.length) {
