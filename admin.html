@@ -7,18 +7,22 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header class="gov-header">
-      <div class="emblem-section">
-        <!-- <img
-          src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg"
-          alt="Emblem"
-        /> -->
+    <header class="gov-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 5%;">
+    <div class="emblem-section">
         <div class="gov-title">
-          <h2>Team Codewave of India</h2>
-          <p>Internal Grievance Management System</p>
+            <h2>Team Codewave of India</h2>
+            <p>Internal Grievance Management System</p>
         </div>
-      </div>
-    </header>
+    </div>
+
+    <div class="user-profile" style="display: flex; align-items: center; gap: 15px;">
+        <div class="profile-text" style="text-align: right;">
+            <span id="userName" style="display: block; font-weight: bold; color: #000080;">Officer Name</span>
+            <small style="color: #666;">Status: Online</small>
+        </div>
+        <button onclick="logoutAdmin()" style="background: #d32f2f; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Logout</button>
+    </div>
+</header>
 
     <div class="admin-main">
       <div class="stats-container">
@@ -114,6 +118,7 @@
         window.location.href = "admin_login.html";
       }
     </script>
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="app.js"></script>

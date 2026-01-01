@@ -13,6 +13,7 @@
     </style>
 </head>
 <body>
+    
     <div class="login-card">
         <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" height="80" alt="Emblem"> -->
         <h2>Officer Authentication</h2>
@@ -39,18 +40,21 @@
     </div>
 </footer>
     <script>
-        function loginAdmin() {
-            const user = document.getElementById('adminUser').value;
-            const pass = document.getElementById('adminPass').value;
-            
-            // Hackathon demo-r jonno basic logic (Pore Firebase Auth-e replace kora jabe)
-            if(user === "admin" && pass === "goi@2026") {
-                sessionStorage.setItem("isLoggedIn", "true");
-                window.location.href = "admin.html";
-            } else {
-                document.getElementById('errorMsg').classList.remove('hidden');
-            }
-        }
+        
+      function loginAdmin() {
+    const user = document.getElementById('adminUser').value;
+    const pass = document.getElementById('adminPass').value;
+    
+    // Hackathon demo credentials
+    if(user === "admin" && pass === "goi@2026") {
+        // Session storage-e data set kora holo
+        sessionStorage.setItem("isLoggedIn", "true");
+        sessionStorage.setItem("officerName", "Sr. Officer - " + user.toUpperCase());
+        window.location.href = "admin.html";
+    } else {
+        document.getElementById('errorMsg').classList.remove('hidden');
+    }
+}
     </script>
 </body>
 </html>
