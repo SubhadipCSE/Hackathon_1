@@ -1,48 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Track Grievance | GOI</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <header class="gov-header">
-        <div class="emblem-section">
-            <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem"> -->
-            <div class="gov-title"><h2>Team CODEWAVE</h2></div>
-        </div>
+      <div class="emblem-section">
+        <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem"> -->
+        <div class="gov-title"><h2>Team CODEWAVE</h2></div>
+      </div>
     </header>
 
     <div class="main-container">
-        <div class="banner">TRACK GRIEVANCE STATUS</div>
-        <div class="content-body">
-            <div class="form-group">
-                <label>Enter Unique Grievance ID</label>
-                <input type="text" id="searchID" placeholder="e.g. GOI-123456" style="width:100%; padding:12px; border:1px solid #ccc;">
-            </div>
-            <button class="btn-submit" onclick="trackStatus()">Check Status</button>
-
-            <div id="statusResult" class="result-box hidden">
-                <h4 id="displayCat"></h4>
-                <p>Status: <strong id="displayStatus" class="id-text" style="font-size:1.2rem"></strong></p>
-                <p id="displayDesc" style="font-style:italic"></p>
-            </div>
+      <div class="banner">TRACK GRIEVANCE STATUS</div>
+      <div class="content-body">
+        <div class="form-group">
+          <label>Enter Unique Grievance ID</label>
+          <input
+            type="text"
+            id="searchID"
+            placeholder="e.g. GOI-123456"
+            style="width: 100%; padding: 12px; border: 1px solid #ccc"
+          />
         </div>
+        <button class="btn-submit" onclick="trackStatus()">Check Status</button>
+
+        <div id="statusResult" class="result-box hidden">
+          <div
+            style="
+              text-align: left;
+              border-bottom: 2px solid #eee;
+              padding-bottom: 10px;
+              margin-bottom: 20px;
+            "
+          >
+            <h4 id="displayCat" style="color: var(--gov-blue); margin: 0"></h4>
+            <p style="margin: 5px 0; color: #666">
+              Complaint Age:
+              <span
+                id="displayAge"
+                style="font-weight: bold; color: #d32f2f"
+              ></span>
+              Days
+            </p>
+          </div>
+
+          <div class="roadmap-container">
+            <div class="roadmap-step" id="step-pending">
+              <div class="circle">1</div>
+              <p>Submitted</p>
+              <small id="time-submitted"></small>
+            </div>
+            <div class="line"></div>
+            <div class="roadmap-step" id="step-inprogress">
+              <div class="circle">2</div>
+              <p>In Progress / Handed Over</p>
+              <small id="time-updated"></small>
+            </div>
+            <div class="line"></div>
+            <div class="roadmap-step" id="step-resolved">
+              <div class="circle">3</div>
+              <p>Resolved</p>
+              <small id="time-resolved"></small>
+            </div>
+            <div class="line" id="line-reject" style="display: none"></div>
+            <div class="roadmap-step" id="step-rejected" style="display: none">
+              <div class="circle" style="background: #d32f2f">✖</div>
+              <p style="color: #d32f2f">Rejected</p>
+              <small id="time-rejected"></small>
+            </div>
+          </div>
+
+          <div
+            style="
+              background: #f9f9f9;
+              padding: 15px;
+              border-radius: 8px;
+              text-align: left;
+              margin-top: 20px;
+            "
+          >
+            <p>
+              <strong>Current Authority:</strong>
+              <span id="displayAuthority"></span>
+            </p>
+            <p>
+              <strong>Latest Status:</strong>
+              <span id="displayStatus" class="badge"></span>
+            </p>
+            <p>
+              <strong>Official Remarks:</strong> <i id="displayRemarks"></i>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     <footer class="gov-footer">
-    <div class="footer-content">
+      <div class="footer-content">
         <div class="disclaimer-box">
-            <p><strong>🚨 PROTOTYPE DISCLAIMER:</strong> This website is developed solely for a Hackathon project by Team Codewave. This is <u>NOT</u> an official Government of India portal. No personal data is being misused.</p>
+          <p>
+            <strong>🚨 PROTOTYPE DISCLAIMER:</strong> This website is developed
+            solely for a Hackathon project by Team Codewave. This is
+            <u>NOT</u> an official Government of India portal. No personal data
+            is being misused.
+          </p>
         </div>
         <div class="footer-links">
-            <p>© 2026 Grievance Redressal System | Team Codewave</p>
-            <p>Powered by Firebase App Check & reCAPTCHA v3</p>
+          <p>© 2026 Grievance Redressal System | Team Codewave</p>
+          <p>Powered by Firebase App Check & reCAPTCHA v3</p>
         </div>
-    </div>
-</footer>
+      </div>
+    </footer>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="app.js"></script>
-</body>
+  </body>
 </html>

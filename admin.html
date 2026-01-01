@@ -73,49 +73,90 @@
      
 
     <div id="actionModal" class="modal hidden">
-      <div class="modal-content">
-        <h3>Official Action & Handover</h3>
-        <p style="font-size: 0.85rem; color: #555">
-          Processing ID:
-          <span id="modalID" style="font-weight: bold; color: black"></span>
+    <div class="modal-content admin-modal">
+        <h3 style="border-bottom: 2px solid var(--gov-orange); padding-bottom: 10px;">🛠️ Official Action & Handover</h3>
+        
+        <p style="font-size: 0.85rem; background: #f1f5f9; padding: 10px; border-radius: 4px;">
+            <strong>Processing ID:</strong> <span id="modalID"></span>
         </p>
 
-        <div class="form-group">
-          <label>Update Status</label>
-          <select id="newStatus">
-            <option value="In Progress">In Progress</option>
-            <option value="Handed Over">Handed Over</option>
-            <option value="Resolved">Resolved</option>
-          </select>
-        </div>
+        <div class="modal-grid">
+            <div class="form-group">
+                <label>Update Status</label>
+                <select id="newStatus">
+                    <option value="In Progress">🟡 In Progress</option>
+                    <option value="Handed Over">🔵 Handed Over</option>
+                    <option value="Resolved">🟢 Resolved</option>
+                    <option value="Rejected">🔴 Rejected</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-          <label>Assign To Department</label>
-          <select id="handoverDept">
-            <option value="Local Police">Local Police</option>
-            <option value="Cyber Cell Unit">Cyber Cell Unit</option>
-            <option value="Anti-Corruption Bureau">
-              Anti-Corruption Bureau
-            </option>
-            <option value="Municipal Office">Municipal Office</option>
-          </select>
-        </div>
+            <div class="form-group">
+                <label>Assign To Department</label>
+                <select id="handoverDept">
+                    <optgroup label="Supreme Authority">
+                        <option value="President's Secretariat">President's Secretariat (Rashtrapati Bhavan)</option>
+                        <option value="Prime Minister's Office">Prime Minister's Office (PMO)</option>
+                    </optgroup>
+                    <optgroup label="Internal Affairs & Justice">
+                        <option value="Ministry of Home Affairs">Ministry of Home Affairs (MHA)</option>
+                        <option value="Supreme Court of India">Supreme Court of India</option>
+                        <option value="Central Vigilance Commission">Central Vigilance Commission (CVC)</option>
+                    </optgroup>
+                    <optgroup label="Enforcement Agencies">
+                        <option value="CBI">Central Bureau of Investigation (CBI)</option>
+                        <option value="Cyber Crime Cell">Cyber Crime Cell (National Unit)</option>
+                        <option value="Anti-Corruption Bureau">Anti-Corruption Bureau (ACB)</option>
+                        <option value="Local Police HQ">State/Local Police HQ</option>
+                    </optgroup>
+                    <optgroup label="Public Services">
+                        <option value="Municipal Corporation">Municipal Corporation (Civic Body)</option>
+                        <option value="Ministry of Health">Ministry of Health & Family Welfare</option>
+                        <option value="NHRC">National Human Rights Commission (NHRC)</option>
+                    </optgroup>
+                </select>
+            </div>
 
-        <div class="form-group">
-          <label>Official Remarks</label>
-          <textarea
-            id="officerRemarks"
-            rows="3"
-            placeholder="Enter action instructions..."
-          ></textarea>
+            <div class="form-group">
+                <label>Official Remarks / Instructions</label>
+                <select id="officerRemarks">
+                    <option value="Under Review: Documents are being verified.">Under Review: Verification in progress</option>
+                    <option value="Action Taken: Forwarded to the respective department for immediate arrest/fine.">Action Taken: Forwarded for immediate action</option>
+                    <option value="Evidence Needed: Please provide more details via official mail.">Evidence Needed: Insufficient information</option>
+                    <option value="Resolved: The issue has been addressed and closed.">Resolved: Issue successfully closed</option>
+                    <option value="Closed: False allegation or out of jurisdiction.">Closed: Invalid/False allegation</option>
+                </select>
+            </div>
         </div>
 
         <div class="modal-buttons">
-          <button class="btn-save" onclick="saveAction()">SUBMIT ACTION</button>
-          <button class="btn-cancel" onclick="closeModal()">CANCEL</button>
+            <button class="btn-save" onclick="saveAction()">CONFIRM ACTION</button>
+            <button class="btn-cancel" onclick="closeModal()">CANCEL</button>
         </div>
-      </div>
     </div>
+</div>
+    <div id="viewModal" class="modal hidden">
+    <div class="modal-content" style="border-top: 8px solid var(--gov-blue);">
+        <h3 style="color: var(--gov-blue); border-bottom: 2px solid #eee; padding-bottom: 10px;">📋 Grievance Full Details</h3>
+        
+        <div id="fullDetailsContent" style="text-align: left; margin-top: 15px; line-height: 1.8;">
+            <p><strong>Grievance ID:</strong> <span id="dt-id"></span></p>
+            <p><strong>Category:</strong> <span id="dt-cat"></span></p>
+            <p><strong>Location:</strong> <span id="dt-loc"></span></p>
+            <p><strong>Date of Incident:</strong> <span id="dt-date"></span></p>
+            <div style="background: #f4f7f9; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                <strong>Description:</strong><br>
+                <p id="dt-desc" style="margin: 5px 0; color: #444; white-space: pre-wrap;"></p>
+            </div>
+            <p><strong>Current Status:</strong> <span id="dt-status" class="badge"></span></p>
+            <p><strong>Official Remarks:</strong> <span id="dt-remarks"></span></p>
+        </div>
+
+        <div class="modal-buttons" style="margin-top: 25px;">
+            <button class="btn-cancel" onclick="closeViewModal()" style="width: 100%;">CLOSE VIEW</button>
+        </div>
+    </div>
+</div>
 <footer class="gov-footer">
     <div class="footer-content">
         <div class="disclaimer-box">

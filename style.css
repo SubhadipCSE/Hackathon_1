@@ -391,3 +391,104 @@ tr { position: relative; }
 .btn-action:active {
     transform: translateY(0);
 }
+/* ==========================================
+   ACTION DROPDOWN STYLING
+   ========================================== */
+
+/* ড্রপডাউন কন্টেইনার */
+.action-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* অ্যাকশন বাটন ডিজাইন (Navy Blue) */
+.btn-action {
+    background-color: #000080; /* Navy Blue */
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.8rem;
+    transition: background 0.3s;
+    white-space: nowrap;
+}
+
+.btn-action:hover {
+    background-color: #FF9933; /* Saffron hover */
+}
+
+/* ড্রপডাউন বক্স (যা বাটন ক্লিক করলে বের হবে) */
+.dropdown-content {
+    position: absolute;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 170px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1000; /* টেবিলের অন্য রো এর ওপরে থাকার জন্য */
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+/* মেনুর অপশনগুলো (View Details & Take Action) */
+.dropdown-content a {
+    color: #333 !important;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.85rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    transition: 0.2s;
+}
+
+.dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+/* অপশনে মাউস রাখলে কালার চেঞ্জ */
+.dropdown-content a:hover {
+    background-color: #f1f5f9;
+    color: #000080 !important;
+    padding-left: 20px; /* সামান্য স্লাইড ইফেক্ট */
+}
+
+/* মেইন টেবিল সেলের পজিশন ঠিক রাখা */
+td {
+    position: relative;
+}
+
+/* Hidden ক্লাস */
+.hidden {
+    display: none !important;
+}
+
+.roadmap-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 30px 0;
+    padding: 0 10px;
+}
+.roadmap-step { text-align: center; flex: 1; position: relative; }
+.circle {
+    width: 30px; height: 30px; background: #ccc; color: white;
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 10px; font-weight: bold;
+}
+.line { flex: 1; height: 4px; background: #ccc; margin-top: -30px; }
+.active .circle { background: var(--gov-blue); box-shadow: 0 0 10px rgba(0,0,128,0.3); }
+.completed .circle { background: var(--gov-green); }
+.completed + .line { background: var(--gov-green); }
+/* ফাইলের শেষে যোগ করুন */
+.active-rejected .circle {
+    background: #d32f2f !important;
+    box-shadow: 0 0 10px rgba(211, 47, 47, 0.4);
+}
+#displayRemarks {
+    color: #b91c1c; /* রিজেকশন কারণ লাল রঙে দেখাবে */
+    font-weight: 500;
+}

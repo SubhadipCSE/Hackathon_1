@@ -44,7 +44,7 @@
 
         <div class="form-group">
           <label>State / Union Territory</label>
-          <select id="issuePlace" onchange="updateCities()">
+          <select id="issuePlace" onchange="updateDistricts()">
             <option value="">-- Select State/UT --</option>
             <option value="Andaman and Nicobar Islands">
               Andaman and Nicobar Islands
@@ -108,16 +108,34 @@
             placeholder="Describe the issue clearly without mentioning your personal identity details..."
           ></textarea>
         </div>
+        <div class="form-group">
+    <label>Upload Evidence (Optional)</label>
+    <input type="file" id="evidenceFile" accept="image/*, .pdf, .doc, .docx" style="border: 1px solid #ccc; padding: 10px; width: 100%;">
+    <p style="font-size: 0.75rem; color: #666; margin-top: 5px;">Supported: Images, PDF, Doc (Max: 5MB)</p>
+</div>
 
         <button class="btn-submit" id="submitBtn" onclick="submitComplaint()">
           Submit Securely
         </button>
 
         <div id="result" class="result-box hidden">
-          <h3>Registration Successful</h3>
-          <p>Please note your Unique Grievance ID for tracking:</p>
-          <div class="id-text" id="complaintID"></div>
-        </div>
+    <h3 style="color: #138808;">✔️ Registration Successful</h3>
+    <p>Please note your Unique Grievance ID for tracking:</p>
+    <div class="id-text" id="complaintID" style="background: #eef2f7; padding: 15px; font-weight: bold; font-size: 1.5rem; letter-spacing: 2px;"></div>
+    
+    <div style="background: #fff5f5; border: 2px solid #fc8181; padding: 15px; border-radius: 8px; margin-top: 20px;">
+        <p style="color: #c53030; font-weight: bold; margin-bottom: 5px;">⚠️ CRITICAL WARNING / সতর্কবার্তা:</p>
+        <p style="color: #2d3748; font-size: 0.9rem; line-height: 1.4;">
+            This portal is strictly **ANONYMOUS**. We do not store your name, email, or phone number. 
+            <strong>If you lose this Complaint ID, it is IMPOSSIBLE to recover it or track your grievance.</strong> 
+            Please take a screenshot or write it down immediately.
+            <br><br>
+            আপনার এই অভিযোগটি সম্পূর্ণ বেনামী। আমরা আপনার নাম বা ফোন নম্বর সংরক্ষণ করি না। 
+            <strong>যদি আপনি এই কমপ্লেন আইডিটি হারিয়ে ফেলেন, তবে অভিযোগটি ট্র্যাক করার আর কোনো উপায় থাকবে না।</strong> 
+            দয়া করে আইডিটি এখনই নোট করে নিন বা স্ক্রিনশট নিন।
+        </p>
+    </div>
+</div>
       </div>
     </div>
 
@@ -136,7 +154,7 @@
         </div>
       </div>
     </footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="app.js"></script>
