@@ -339,3 +339,30 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
         padding: 10px;
     }
 }
+/* Description কলামের সাইজ ফিক্সড রাখা */
+.desc-cell {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    cursor: help;
+    color: #555;
+}
+
+/* Hover করলে পুরো টেক্সট দেখানোর ইফেক্ট */
+.desc-cell:hover {
+    overflow: visible;
+    white-space: normal;
+    background: #fff8e1; /* হালকা হলুদ ব্যাকগ্রাউন্ড */
+    position: absolute;
+    z-index: 100;
+    padding: 10px;
+    border: 1px solid #ff9933;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    width: 300px;
+}
+
+/* টেবিল রো এর পজিশন ঠিক রাখা */
+tr { position: relative; }

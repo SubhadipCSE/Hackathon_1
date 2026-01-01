@@ -1,3 +1,64 @@
+const cityData = {
+    "Andaman and Nicobar Islands": ["Port Blair", "Nicobar", "North and Middle Andaman", "South Andaman"],
+    "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Anantapur", "Chittoor", "East Godavari", "West Godavari", "Kadapa", "Krishna", "Prakasam", "Srikakulam", "Vizianagaram"],
+    "Arunachal Pradesh": ["Itanagar", "Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Upper Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
+    "Assam": ["Guwahati", "Dibrugarh", "Silchar", "Jorhat", "Nagaon", "Tinsukia", "Tezpur", "Barpeta", "Bongaigaon", "Dhubri", "Goalpara", "Golaghat", "Hailakandi", "Karimganj", "Lakhimpur", "Majuli", "Morigaon", "Sivasagar", "Sonitpur"],
+    "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Arrah", "Begusarai", "Katihar", "Munger", "Chapra", "Nalanda", "Saharsa", "Sasaram", "Hajipur", "Siwan", "Motihari", "Bettiah"],
+    "Chandigarh": ["Chandigarh"],
+    "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Jagdalpur", "Ambikapur", "Dhamtari", "Durg", "Mahasamund", "Raigarh"],
+    "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Diu", "Silvassa"],
+    "Delhi": ["New Delhi", "North Delhi", "South Delhi", "East Delhi", "West Delhi", "Central Delhi", "North East Delhi", "North West Delhi", "South East Delhi", "South West Delhi", "Shahdara"],
+    "Goa": ["North Goa", "South Goa", "Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda"],
+    "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar", "Junagadh", "Anand", "Navsari", "Morbi", "Bharuch", "Valsad", "Porbandar", "Mehsana"],
+    "Haryana": ["Faridabad", "Gurugram", "Panipat", "Ambala", "Yamunanagar", "Rohtak", "Hisar", "Karnal", "Sonipat", "Panchkula", "Bhiwani", "Sirsa", "Jind", "Rewari"],
+    "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi", "Kullu", "Chamba", "Hamirpur", "Kangra", "Kinnaur", "Lahaul and Spiti", "Sirmaur", "Una"],
+    "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla", "Kathua", "Budgam", "Kupwara", "Pulwama", "Rajouri", "Udhampur", "Poonch", "Kulgam", "Samba", "Reasi"],
+    "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Deoghar", "Hazaribagh", "Giridih", "Ramgarh", "Dumka", "Palamu", "Sahibganj", "Chaibasa"],
+    "Karnataka": ["Bengaluru", "Mysuru", "Hubballi-Dharwad", "Mangaluru", "Belagavi", "Kalaburagi", "Ballari", "Vijayapura", "Shivamogga", "Tumakuru", "Raichur", "Bidar", "Hassan", "Udupi", "Davanagere"],
+    "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kollam", "Alappuzha", "Kannur", "Palakkad", "Kottayam", "Kasaragod", "Idukki", "Malappuram", "Pathanamthitta", "Wayanad"],
+    "Ladakh": ["Leh", "Kargil"],
+    "Lakshadweep": ["Kavaratti", "Agatti", "Minicoy"],
+    "Madhya Pradesh": ["Indore", "Bhopal", "Jabalpur", "Gwalior", "Ujjain", "Sagar", "Dewas", "Satna", "Ratlam", "Rewa", "Katni", "Singrauli", "Burhanpur", "Khandwa", "Bhind", "Chhindwara"],
+    "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Aurangabad", "Solapur", "Amravati", "Navi Mumbai", "Kolhapur", "Akola", "Jalgaon", "Latur", "Sangli", "Ahmednagar", "Chandrapur", "Parbhani"],
+    "Manipur": ["Imphal West", "Imphal East", "Bishnupur", "Thoubal", "Churachandpur", "Senapati", "Ukhrul", "Chandel", "Tamenglong"],
+    "Meghalaya": ["Shillong", "Tura", "Jowai", "Nongpoh", "Williamnagar", "Baghmara", "Resubelpara"],
+    "Mizoram": ["Aizawl", "Lunglei", "Champhai", "Saiha", "Kolasib", "Serchhip", "Lawngtlai"],
+    "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Wokha", "Zunheboto", "Phek", "Mon"],
+    "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Berhampur", "Sambalpur", "Puri", "Balasore", "Bhadrak", "Baripada", "Jharsuguda", "Anugul", "Kendujhar"],
+    "Puducherry": ["Puducherry", "Karaikal", "Mahe", "Yanam"],
+    "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Mohali", "Hoshiarpur", "Pathankot", "Moga", "Abohar", "Phagwara", "Khanna"],
+    "Rajasthan": ["Jaipur", "Jodhpur", "Kota", "Bikaner", "Ajmer", "Udaipur", "Bhilwara", "Alwar", "Bharatpur", "Sikar", "Pali", "Sri Ganganagar", "Barmer", "Chittorgarh", "Jhunjhunu"],
+    "Sikkim": ["Gangtok", "Gyalshing", "Mangan", "Namchi", "Soreng", "Pakyong"],
+    "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tiruppur", "Erode", "Vellore", "Thoothukudi", "Tirunelveli", "Ambattur", "Nagercoil", "Thanjavur", "Kancheepuram"],
+    "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Ramagundam", "Khammam", "Mahbubnagar", "Nalgonda", "Adilabad", "Suryapet", "Miryalaguda"],
+    "Tripura": ["Agartala", "Udaipur", "Dharmanagar", "Ambassa", "Kailasahar", "Belonia", "Khowai"],
+    "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad", "Agra", "Meerut", "Varanasi", "Prayagraj", "Bareilly", "Aligarh", "Moradabad", "Saharanpur", "Gorakhpur", "Noida", "Firozabad", "Jhansi", "Muzaffarnagar", "Mathura", "Ayodhya"],
+    "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani", "Rudrapur", "Kashipur", "Rishikesh", "Pithoragarh", "Nainital", "Almora"],
+    "West Bengal": ["Kolkata", "Howrah", "Asansol", "Siliguri", "Durgapur", "Bardhaman", "Malda", "Baharampur", "Habra", "Kharagpur", "Shantipur", "Dankuni", "Medinipur", "Jalpaiguri", "Darjeeling", "Cooch Behar", "Purulia", "Bankura"]
+};
+
+function updateCities() {
+    const stateSelect = document.getElementById("issuePlace");
+    const citySelect = document.getElementById("issueCity");
+    const selectedState = stateSelect.value;
+
+    citySelect.innerHTML = '<option value="">-- Select City --</option>';
+
+    if (selectedState && cityData[selectedState]) {
+        cityData[selectedState].sort().forEach(city => {
+            let option = document.createElement("option");
+            option.value = city;
+            option.text = city;
+            citySelect.add(option);
+        });
+    } else {
+        citySelect.innerHTML = '<option value="">-- Select State First --</option>';
+    }
+}
+
+
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyAS0N32VW0Z_FT-LAo-9YA6g1VkheZqqGU",
   authDomain: "grivence-by-codewave.firebaseapp.com",
@@ -31,42 +92,37 @@ let currentDocId = "";
 // 1. CITIZEN: COMPLAINT REGISTRATION (index.html)
 // ==========================================
 async function submitComplaint() {
-  const category = document.getElementById("category").value;
-  const description = document.getElementById("complaintText").value;
-  const submitBtn = document.getElementById("submitBtn");
+    // 1. Input values gulo thikmoto nau
+    const category = document.getElementById('category').value;
+    const state = document.getElementById('issuePlace').value;
+    const city = document.getElementById('issueCity').value;
+    const dateOfIncident = document.getElementById('incidentDate').value; // Check id: incidentDate
+    const description = document.getElementById('complaintText').value;
 
-  if (!description || description.length < 5) {
-    alert("Please provide a detailed description.");
-    return;
-  }
+    if (!category || !state || !city || !dateOfIncident || !description) {
+        alert("Please fill all fields!");
+        return;
+    }
 
-  submitBtn.innerText = "Processing Official Registration...";
-  submitBtn.disabled = true;
+    const randomID = "GOI-" + Math.floor(100000 + Math.random() * 900000);
 
-  // Unique Grievance ID toiri kora (GOI-123456)
-  const randomID = "GOI-" + Math.floor(100000 + Math.random() * 900000);
-
-  try {
-    await db.collection("complaints").add({
-      complaintID: randomID,
-      category: category,
-      description: description,
-      status: "Pending",
-      handoverTo: "Central Cell",
-      remarks: "Complaint filed successfully.",
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-
-    // Success UI
-    document.getElementById("result").classList.remove("hidden");
-    document.getElementById("complaintID").innerText = randomID;
-    submitBtn.style.display = "none";
-  } catch (error) {
-    console.error("Error adding document: ", error);
-    alert("Registration failed. Please check your internet or Firebase rules.");
-    submitBtn.innerText = "Register Grievance";
-    submitBtn.disabled = false;
-  }
+    try {
+        await db.collection("complaints").add({
+            complaintID: randomID,
+            category: category,
+            state: state,
+            city: city,
+            incidentDate: dateOfIncident, // Eikhane 'incidentDate' nam-e save hochhe
+            status: "Pending",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // Success message and UI reset
+        document.getElementById('result').classList.remove('hidden');
+        document.getElementById('complaintID').innerText = randomID;
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 }
 
 // ==========================================
@@ -120,67 +176,74 @@ async function trackStatus() {
 
 // Data Load kora ebong Counters update kora
 function loadAdminData() {
-  console.log("Fetching live data from GOI servers...");
-  db.collection("complaints")
+    console.log("Fetching live data from GOI servers...");
+    
+    // Firestore থেকে ডেটা আনা হচ্ছে
+    db.collection("complaints")
     .orderBy("timestamp", "desc")
-    .onSnapshot(
-      (snap) => {
+    .onSnapshot((snap) => {
         const tableBody = document.getElementById("adminTableBody");
         if (!tableBody) return;
 
         tableBody.innerHTML = "";
+        
+        // কাউন্টার ভেরিয়েবল
         let total = 0,
-          pending = 0,
-          resolved = 0,
-          handedOver = 0;
+            pending = 0,
+            resolved = 0,
+            handedOver = 0;
 
         snap.forEach((doc) => {
-          const data = doc.data();
-          total++;
+            const data = doc.data();
+            total++;
 
-          if (data.status === "Pending" || data.status === "In Progress") {
-            pending++;
-          } else if (data.status === "Handed Over") {
-            handedOver++;
-          } else if (data.status === "Resolved") {
-            resolved++;
-          }
+            // স্ট্যাটাস কাউন্ট লজিক
+            if (data.status === "Pending" || data.status === "In Progress") {
+                pending++;
+            } else if (data.status === "Handed Over") {
+                handedOver++;
+            } else if (data.status === "Resolved") {
+                resolved++;
+            }
 
-          const statusClass = data.status.replace(/\s/g, "").toLowerCase();
-
-          tableBody.innerHTML += `
+            // টেবিল রো জেনারেট করা
+            // নিশ্চিত করুন database-এ 'incidentDate' নামেই ডেটা সেভ হয়েছে
+            tableBody.innerHTML += `
                 <tr>
                     <td><strong>${data.complaintID}</strong></td>
+                    <td>${data.incidentDate || 'No Date'}</td> 
                     <td>${data.category}</td>
-                    <td>${data.description.substring(0, 40)}...</td>
-                    <td><span class="badge badge-${statusClass}">${
-            data.status
-          }</span></td>
-                    <td style="color:#000080; font-weight:bold;">${
-                      data.handoverTo || "Not Assigned"
-                    }</td>
                     <td>
-                        <button class="btn-action" onclick="openActionModal('${
-                          doc.id
-                        }', '${data.complaintID}')" 
-                                style="background:#000080; color:white; border:none; padding:8px 12px; cursor:pointer; border-radius:4px;">
-                            Take Action
-                        </button>
+                        <div class="desc-cell" title="Hover to read more">
+                            ${data.description}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge badge-${data.status.replace(/\s/g, '').toLowerCase()}">
+                            ${data.status}
+                        </span>
+                    </td>
+                    <td style="color:#000080; font-weight:bold;">${data.handoverTo || "N/A"}</td>
+                    <td>
+                        <button class="btn-action" onclick="openActionModal('${doc.id}', '${data.complaintID}')">Take Action</button>
                     </td>
                 </tr>
             `;
         });
 
-        // Stats UI update
-        document.getElementById("count-total").innerText = total;
-        document.getElementById("count-pending").innerText = pending;
-        document.getElementById("count-handedover").innerText = handedOver;
-        document.getElementById("count-resolved").innerText = resolved;
-      },
-      (error) => {
-        console.error("Admin Load Error:", error);
-      }
-    );
+        // স্ট্যাটাস বার আপডেট (এই অংশটি গুরুত্বপূর্ণ)
+        updateStatsUI(total, pending, handedOver, resolved);
+    }, (error) => {
+        console.error("Error fetching data: ", error);
+    });
+}
+
+// স্ট্যাটাস কার্ড আপডেট করার আলাদা ফাংশন
+function updateStatsUI(total, pending, handedOver, resolved) {
+    if(document.getElementById('count-total')) document.getElementById('count-total').innerText = total;
+    if(document.getElementById('count-pending')) document.getElementById('count-pending').innerText = pending;
+    if(document.getElementById('count-handedover')) document.getElementById('count-handedover').innerText = handedOver;
+    if(document.getElementById('count-resolved')) document.getElementById('count-resolved').innerText = resolved;
 }
 
 // Action Modal Open kora
@@ -226,29 +289,6 @@ function logoutAdmin() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function filterAdminTable() {
     const input = document.getElementById("adminSearchInput");
     const filter = input.value.toUpperCase();
@@ -260,7 +300,39 @@ function filterAdminTable() {
         if (td) {
             const txtValue = td.textContent || td.innerText;
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
+                tr[i].style.display = "";async function submitComplaint() {
+    // 1. Input values gulo thikmoto nau
+    const category = document.getElementById('category').value;
+    const state = document.getElementById('issuePlace').value;
+    const city = document.getElementById('issueCity').value;
+    const dateOfIncident = document.getElementById('incidentDate').value; // Check id: incidentDate
+    const description = document.getElementById('complaintText').value;
+
+    if (!category || !state || !city || !dateOfIncident || !description) {
+        alert("Please fill all fields!");
+        return;
+    }
+
+    const randomID = "GOI-" + Math.floor(100000 + Math.random() * 900000);
+
+    try {
+        await db.collection("complaints").add({
+            complaintID: randomID,
+            category: category,
+            state: state,
+            city: city,
+            incidentDate: dateOfIncident, // Eikhane 'incidentDate' nam-e save hochhe
+            status: "Pending",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // Success message and UI reset
+        document.getElementById('result').classList.remove('hidden');
+        document.getElementById('complaintID').innerText = randomID;
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+}
             } else {
                 tr[i].style.display = "none";
             }
