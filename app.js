@@ -1,3 +1,6 @@
+// ==========================================
+// 1. DATA & CONFIGURATION
+// ==========================================
 const cityData = {
     "Andaman and Nicobar Islands": ["Port Blair", "Nicobar", "North and Middle Andaman", "South Andaman"],
     "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Anantapur", "Chittoor", "East Godavari", "West Godavari", "Kadapa", "Krishna", "Prakasam", "Srikakulam", "Vizianagaram"],
@@ -41,9 +44,7 @@ function updateCities() {
     const stateSelect = document.getElementById("issuePlace");
     const citySelect = document.getElementById("issueCity");
     const selectedState = stateSelect.value;
-
     citySelect.innerHTML = '<option value="">-- Select City --</option>';
-
     if (selectedState && cityData[selectedState]) {
         cityData[selectedState].sort().forEach(city => {
             let option = document.createElement("option");
@@ -56,47 +57,30 @@ function updateCities() {
     }
 }
 
-
-
-
 const firebaseConfig = {
-  apiKey: "AIzaSyAS0N32VW0Z_FT-LAo-9YA6g1VkheZqqGU",
-  authDomain: "grivence-by-codewave.firebaseapp.com",
-  projectId: "grivence-by-codewave",
-  storageBucket: "grivence-by-codewave.firebasestorage.app",
-  messagingSenderId: "1080190479502",
-  appId: "1:1080190479502:web:bd6c541c567f806d382ddf",
-  measurementId: "G-8FHZ033TL7",
+    apiKey: "AIzaSyAS0N32VW0Z_FT-LAo-9YA6g1VkheZqqGU",
+    authDomain: "grivence-by-codewave.firebaseapp.com",
+    projectId: "grivence-by-codewave",
+    storageBucket: "grivence-by-codewave.firebasestorage.app",
+    messagingSenderId: "1080190479502",
+    appId: "1:1080190479502:web:bd6c541c567f806d382ddf",
+    measurementId: "G-8FHZ033TL7",
 };
-// Firebase App Check SDK লিঙ্কে index.html এ থাকা নিশ্চিত করুন
-// index.html এ <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app-check.js"></script> দিন
 
-// const appCheck = firebase.appCheck();
-
-// // Billing ছাড়া reCAPTCHA v3 ব্যবহারের জন্য activation
-// appCheck.activate(
-//     '6Ley-DwsAAAAAML-QM9nYZ86Q747NmQrv8h5yHwT', // আপনার প্রাপ্ত Site Key এখানে বসান
-//     true // auto-refresh tokens enabled
-// );
-
-// Firebase Initialize kora holo
 if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.firestore();
-
-// Global Variable for Admin Action
 let currentDocId = "";
 
 // ==========================================
-// 1. CITIZEN: COMPLAINT REGISTRATION (index.html)
+// 2. CITIZEN: REGISTRATION & TRACKING
 // ==========================================
 async function submitComplaint() {
-    // 1. Input values gulo thikmoto nau
     const category = document.getElementById('category').value;
     const state = document.getElementById('issuePlace').value;
     const city = document.getElementById('issueCity').value;
-    const dateOfIncident = document.getElementById('incidentDate').value; // Check id: incidentDate
+    const dateOfIncident = document.getElementById('incidentDate').value;
     const description = document.getElementById('complaintText').value;
 
     if (!category || !state || !city || !dateOfIncident || !description) {
@@ -105,19 +89,16 @@ async function submitComplaint() {
     }
 
     const randomID = "GOI-" + Math.floor(100000 + Math.random() * 900000);
-
     try {
         await db.collection("complaints").add({
             complaintID: randomID,
             category: category,
             state: state,
             city: city,
-            incidentDate: dateOfIncident, // Eikhane 'incidentDate' nam-e save hochhe
+            incidentDate: dateOfIncident,
             status: "Pending",
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
-        
-        // Success message and UI reset
         document.getElementById('result').classList.remove('hidden');
         document.getElementById('complaintID').innerText = randomID;
     } catch (e) {
@@ -125,120 +106,58 @@ async function submitComplaint() {
     }
 }
 
-// ==========================================
-// 2. CITIZEN: TRACK STATUS (track.html)
-// ==========================================
 async function trackStatus() {
-  const searchID = document.getElementById("searchID").value.trim();
-  const resultBox = document.getElementById("statusResult");
-
-  if (!searchID) {
-    alert("Please enter a valid Grievance ID.");
-    return;
-  }
-
-  try {
-    const snapshot = await db
-      .collection("complaints")
-      .where("complaintID", "==", searchID)
-      .get();
-
-    if (snapshot.empty) {
-      alert("No record found for this ID. Please check and try again.");
-      return;
-    }
-
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      resultBox.classList.remove("hidden");
-      document.getElementById("displayCat").innerText =
-        "Department: " + data.category;
-      document.getElementById("displayStatus").innerText = data.status;
-      document.getElementById("displayDesc").innerText =
-        "Details: " + data.description;
-      document.getElementById("displayRemarks").innerHTML = `
-                <strong>Current Assignment:</strong> ${
-                  data.handoverTo || "Under Process"
-                } <br>
-                <strong>Official Remarks:</strong> ${
-                  data.remarks || "No remarks yet."
-                }
-            `;
-    });
-  } catch (error) {
-    console.error("Tracking Error:", error);
-  }
+    const searchID = document.getElementById("searchID").value.trim();
+    const resultBox = document.getElementById("statusResult");
+    if (!searchID) { alert("Please enter a valid Grievance ID."); return; }
+    try {
+        const snapshot = await db.collection("complaints").where("complaintID", "==", searchID).get();
+        if (snapshot.empty) { alert("No record found."); return; }
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            resultBox.classList.remove("hidden");
+            document.getElementById("displayCat").innerText = "Department: " + data.category;
+            document.getElementById("displayStatus").innerText = data.status;
+            document.getElementById("displayDesc").innerText = "Details: " + data.description;
+            document.getElementById("displayRemarks").innerHTML = `
+                <strong>Current Assignment:</strong> ${data.handoverTo || "Under Process"} <br>
+                <strong>Official Remarks:</strong> ${data.remarks || "No remarks yet."}`;
+        });
+    } catch (error) { console.error("Tracking Error:", error); }
 }
 
 // ==========================================
-// 3. OFFICER: ADMIN DASHBOARD (admin.html)
+// 3. OFFICER: ADMIN DASHBOARD
 // ==========================================
-
-// Data Load kora ebong Counters update kora
 function loadAdminData() {
-    console.log("Fetching live data from GOI servers...");
-    
-    // Firestore থেকে ডেটা আনা হচ্ছে
-    db.collection("complaints")
-    .orderBy("timestamp", "desc")
-    .onSnapshot((snap) => {
+    db.collection("complaints").orderBy("timestamp", "desc").onSnapshot((snap) => {
         const tableBody = document.getElementById("adminTableBody");
         if (!tableBody) return;
-
         tableBody.innerHTML = "";
-        
-        // কাউন্টার ভেরিয়েবল
-        let total = 0,
-            pending = 0,
-            resolved = 0,
-            handedOver = 0;
+        let total = 0, pending = 0, resolved = 0, handedOver = 0;
 
         snap.forEach((doc) => {
             const data = doc.data();
             total++;
+            if (data.status === "Pending" || data.status === "In Progress") pending++;
+            else if (data.status === "Handed Over") handedOver++;
+            else if (data.status === "Resolved") resolved++;
 
-            // স্ট্যাটাস কাউন্ট লজিক
-            if (data.status === "Pending" || data.status === "In Progress") {
-                pending++;
-            } else if (data.status === "Handed Over") {
-                handedOver++;
-            } else if (data.status === "Resolved") {
-                resolved++;
-            }
-
-            // টেবিল রো জেনারেট করা
-            // নিশ্চিত করুন database-এ 'incidentDate' নামেই ডেটা সেভ হয়েছে
             tableBody.innerHTML += `
                 <tr>
                     <td><strong>${data.complaintID}</strong></td>
                     <td>${data.incidentDate || 'No Date'}</td> 
                     <td>${data.category}</td>
-                    <td>
-                        <div class="desc-cell" title="Hover to read more">
-                            ${data.description}
-                        </div>
-                    </td>
-                    <td>
-                        <span class="badge badge-${data.status.replace(/\s/g, '').toLowerCase()}">
-                            ${data.status}
-                        </span>
-                    </td>
+                    <td><div class="desc-cell" title="Hover to read more">${data.description}</div></td>
+                    <td><span class="badge badge-${data.status.replace(/\s/g, '').toLowerCase()}">${data.status}</span></td>
                     <td style="color:#000080; font-weight:bold;">${data.handoverTo || "N/A"}</td>
-                    <td>
-                        <button class="btn-action" onclick="openActionModal('${doc.id}', '${data.complaintID}')">Take Action</button>
-                    </td>
-                </tr>
-            `;
+                    <td><button class="btn-action" onclick="openActionModal('${doc.id}', '${data.complaintID}')">Take Action</button></td>
+                </tr>`;
         });
-
-        // স্ট্যাটাস বার আপডেট (এই অংশটি গুরুত্বপূর্ণ)
         updateStatsUI(total, pending, handedOver, resolved);
-    }, (error) => {
-        console.error("Error fetching data: ", error);
     });
 }
 
-// স্ট্যাটাস কার্ড আপডেট করার আলাদা ফাংশন
 function updateStatsUI(total, pending, handedOver, resolved) {
     if(document.getElementById('count-total')) document.getElementById('count-total').innerText = total;
     if(document.getElementById('count-pending')) document.getElementById('count-pending').innerText = pending;
@@ -246,48 +165,38 @@ function updateStatsUI(total, pending, handedOver, resolved) {
     if(document.getElementById('count-resolved')) document.getElementById('count-resolved').innerText = resolved;
 }
 
-// Action Modal Open kora
 window.openActionModal = function (docId, complaintId) {
-  currentDocId = docId;
-  document.getElementById("modalID").innerText = complaintId;
-  document.getElementById("actionModal").classList.remove("hidden");
+    currentDocId = docId;
+    document.getElementById("modalID").innerText = complaintId;
+    document.getElementById("actionModal").classList.remove("hidden");
 };
 
-// Action Modal Close kora
 window.closeModal = function () {
-  document.getElementById("actionModal").classList.add("hidden");
-  currentDocId = "";
+    document.getElementById("actionModal").classList.add("hidden");
+    currentDocId = "";
 };
 
-// Action Save/Handover kora
 window.saveAction = async function () {
-  const status = document.getElementById("newStatus").value;
-  const handover = document.getElementById("handoverDept").value;
-  const remarks = document.getElementById("officerRemarks").value;
-
-  if (!currentDocId) return;
-
-  try {
-    await db.collection("complaints").doc(currentDocId).update({
-      status: status,
-      handoverTo: handover,
-      remarks: remarks,
-      lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-
-    alert("Official Action recorded and Handed Over to " + handover);
-    closeModal();
-  } catch (error) {
-    console.error("Action Update Error:", error);
-    alert("Failed to update database. Check Firestore Rules.");
-  }
+    const status = document.getElementById("newStatus").value;
+    const handover = document.getElementById("handoverDept").value;
+    const remarks = document.getElementById("officerRemarks").value;
+    if (!currentDocId) return;
+    try {
+        await db.collection("complaints").doc(currentDocId).update({
+            status: status,
+            handoverTo: handover,
+            remarks: remarks,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        alert("Action recorded!");
+        closeModal();
+    } catch (error) { alert("Error updating database."); }
 };
 
 function logoutAdmin() {
-  sessionStorage.removeItem("isLoggedIn");
-  window.location.href = "admin_login.html";
+    sessionStorage.removeItem("isLoggedIn");
+    window.location.href = "admin_login.html";
 }
-
 
 function filterAdminTable() {
     const input = document.getElementById("adminSearchInput");
@@ -295,47 +204,11 @@ function filterAdminTable() {
     const table = document.getElementById("complaintTable");
     const tr = table.getElementsByTagName("tr");
 
-    for (let i = 1; i < tr.length; i++) { // i=1 কারণ i=0 হচ্ছে হেডার
-        const td = tr[i].getElementsByTagName("td")[0]; // ১ম কলাম (Grievance ID)
+    for (let i = 1; i < tr.length; i++) {
+        const td = tr[i].getElementsByTagName("td")[0];
         if (td) {
             const txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";async function submitComplaint() {
-    // 1. Input values gulo thikmoto nau
-    const category = document.getElementById('category').value;
-    const state = document.getElementById('issuePlace').value;
-    const city = document.getElementById('issueCity').value;
-    const dateOfIncident = document.getElementById('incidentDate').value; // Check id: incidentDate
-    const description = document.getElementById('complaintText').value;
-
-    if (!category || !state || !city || !dateOfIncident || !description) {
-        alert("Please fill all fields!");
-        return;
-    }
-
-    const randomID = "GOI-" + Math.floor(100000 + Math.random() * 900000);
-
-    try {
-        await db.collection("complaints").add({
-            complaintID: randomID,
-            category: category,
-            state: state,
-            city: city,
-            incidentDate: dateOfIncident, // Eikhane 'incidentDate' nam-e save hochhe
-            status: "Pending",
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        
-        // Success message and UI reset
-        document.getElementById('result').classList.remove('hidden');
-        document.getElementById('complaintID').innerText = randomID;
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
-}
-            } else {
-                tr[i].style.display = "none";
-            }
+            tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
         }
     }
 }
