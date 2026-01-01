@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Login | GOI Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-card { max-width: 400px; margin: 100px auto; padding: 40px; background: white; border-top: 6px solid var(--gov-orange); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px; text-align: center; }
+        .login-card h2 { color: var(--gov-blue); margin-bottom: 25px; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        input[type="password"], input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" height="80" alt="Emblem"> -->
+        <h2>Officer Authentication</h2>
+        <div class="input-group">
+            <label>Officer ID / Username</label>
+            <input type="text" id="adminUser" placeholder="Enter ID">
+        </div>
+        <div class="input-group">
+            <label>Security Password</label>
+            <input type="password" id="adminPass" placeholder="••••••••">
+        </div>
+        <button class="btn-submit" onclick="loginAdmin()">ACCESS DASHBOARD</button>
+        <p id="errorMsg" style="color:red; font-size:0.8rem; margin-top:15px;" class="hidden">Invalid Credentials</p>
+    </div>
+<footer class="gov-footer">
+    <div class="footer-content">
+        <div class="disclaimer-box">
+            <p><strong>🚨 PROTOTYPE DISCLAIMER:</strong> This website is developed solely for a Hackathon project by Team Codewave. This is <u>NOT</u> an official Government of India portal. No personal data is being misused.</p>
+        </div>
+        <div class="footer-links">
+            <p>© 2026 Grievance Redressal System | Team Codewave</p>
+            <p>Powered by Firebase App Check & reCAPTCHA v3</p>
+        </div>
+    </div>
+</footer>
+    <script>
+        function loginAdmin() {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+            
+            // Hackathon demo-r jonno basic logic (Pore Firebase Auth-e replace kora jabe)
+            if(user === "admin" && pass === "goi@2026") {
+                sessionStorage.setItem("isLoggedIn", "true");
+                window.location.href = "admin.html";
+            } else {
+                document.getElementById('errorMsg').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

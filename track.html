@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Track Grievance | GOI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="gov-header">
+        <div class="emblem-section">
+            <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem"> -->
+            <div class="gov-title"><h2>Team CODEWAVE</h2></div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="banner">TRACK GRIEVANCE STATUS</div>
+        <div class="content-body">
+            <div class="form-group">
+                <label>Enter Unique Grievance ID</label>
+                <input type="text" id="searchID" placeholder="e.g. GOI-123456" style="width:100%; padding:12px; border:1px solid #ccc;">
+            </div>
+            <button class="btn-submit" onclick="trackStatus()">Check Status</button>
+
+            <div id="statusResult" class="result-box hidden">
+                <h4 id="displayCat"></h4>
+                <p>Status: <strong id="displayStatus" class="id-text" style="font-size:1.2rem"></strong></p>
+                <p id="displayDesc" style="font-style:italic"></p>
+            </div>
+        </div>
+    </div>
+    <footer class="gov-footer">
+    <div class="footer-content">
+        <div class="disclaimer-box">
+            <p><strong>🚨 PROTOTYPE DISCLAIMER:</strong> This website is developed solely for a Hackathon project by Team Codewave. This is <u>NOT</u> an official Government of India portal. No personal data is being misused.</p>
+        </div>
+        <div class="footer-links">
+            <p>© 2026 Grievance Redressal System | Team Codewave</p>
+            <p>Powered by Firebase App Check & reCAPTCHA v3</p>
+        </div>
+    </div>
+</footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

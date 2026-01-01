@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Officer Dashboard | Central Codewave</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="gov-header">
+      <div class="emblem-section">
+        <!-- <img
+          src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg"
+          alt="Emblem"
+        /> -->
+        <div class="gov-title">
+          <h2>Team Codewave of India</h2>
+          <p>Internal Grievance Management System</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="admin-main">
+      <div class="stats-container">
+        <div class="stat-card">
+          <h3>Total Grievances</h3>
+          <p id="count-total">0</p>
+        </div>
+        <div class="stat-card" style="border-bottom-color: #ff9933">
+          <h3>Pending Action</h3>
+          <p id="count-pending">0</p>
+        </div>
+        <div class="stat-card" style="border-bottom-color: #138808">
+          <h3>Resolved Cases</h3>
+          <p id="count-resolved">0</p>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Grievance ID</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Handover To</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="actionModal" class="modal hidden">
+      <div class="modal-content">
+        <h3>Official Action & Handover</h3>
+        <p style="font-size: 0.85rem; color: #555">
+          Processing ID:
+          <span id="modalID" style="font-weight: bold; color: black"></span>
+        </p>
+
+        <div class="form-group">
+          <label>Update Status</label>
+          <select id="newStatus">
+            <option value="In Progress">In Progress</option>
+            <option value="Handed Over">Handed Over</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Assign To Department</label>
+          <select id="handoverDept">
+            <option value="Local Police">Local Police</option>
+            <option value="Cyber Cell Unit">Cyber Cell Unit</option>
+            <option value="Anti-Corruption Bureau">
+              Anti-Corruption Bureau
+            </option>
+            <option value="Municipal Office">Municipal Office</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Official Remarks</label>
+          <textarea
+            id="officerRemarks"
+            rows="3"
+            placeholder="Enter action instructions..."
+          ></textarea>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-save" onclick="saveAction()">SUBMIT ACTION</button>
+          <button class="btn-cancel" onclick="closeModal()">CANCEL</button>
+        </div>
+      </div>
+    </div>
+<footer class="gov-footer">
+    <div class="footer-content">
+        <div class="disclaimer-box">
+            <p><strong>🚨 PROTOTYPE DISCLAIMER:</strong> This website is developed solely for a Hackathon project by Team Codewave. This is <u>NOT</u> an official Government of India portal. No personal data is being misused.</p>
+        </div>
+        <div class="footer-links">
+            <p>© 2026 Grievance Redressal System | Team Codewave</p>
+            <p>Powered by Firebase App Check & reCAPTCHA v3</p>
+        </div>
+    </div>
+</footer>
+    <script>
+      // Security Check: Login chara page access kora jabe na
+      if (sessionStorage.getItem("isLoggedIn") !== "true") {
+        window.location.href = "admin_login.html";
+      }
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="app.js"></script>
+    <script>
+      window.onload = function () {
+        loadAdminData();
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CPGRAMS | Centralized Public Grievance Portal BY TEAM CODEWAVE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="gov-header">
+        <div class="emblem-section">
+            <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem"> -->
+            <div class="gov-title">
+                <h2>Team CODEWAVE</h2>
+                <p>Anonymous Grievance Redressal System</p>
+            </div>
+        </div>
+        <nav>
+            <a href="index.html">Register</a> | 
+            <a href="track.html">Track Status</a> | 
+            <a href="admin.html" style="color:red">Officer Login</a>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="banner">LODGE YOUR COMPLAINT ANONYMOUSLY</div>
+        <div class="content-body">
+            <div class="form-group">
+                <label>Department / Category</label>
+                <select id="category">
+                    <option value="Corruption">Vigilance (Corruption)</option>
+                    <option value="Harassment">Women Safety / Harassment</option>
+                    <option value="Civic">Civic Services (Road/Water)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Description of Grievance</label>
+                <textarea id="complaintText" placeholder="Describe the issue without mentioning your name..."></textarea>
+            </div>
+            <button class="btn-submit" id="submitBtn" onclick="submitComplaint()">Submit Securely</button>
+
+            <div id="result" class="result-box hidden">
+                <h3>Registration Successful</h3>
+                <p>Please note your Unique Grievance ID:</p>
+                <div class="id-text" id="complaintID"></div>
+            </div>
+        </div>
+    </div>
+<footer class="gov-footer">
+    <div class="footer-content">
+        <div class="disclaimer-box">
+            <p><strong>🚨 PROTOTYPE DISCLAIMER:</strong> This website is developed solely for a Hackathon project by Team Codewave. This is <u>NOT</u> an official Government of India portal. No personal data is being misused.</p>
+        </div>
+        <div class="footer-links">
+            <p>© 2026 Grievance Redressal System | Team Codewave</p>
+            <p>Powered by Firebase App Check & reCAPTCHA v3</p>
+        </div>
+    </div>
+</footer>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
