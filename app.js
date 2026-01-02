@@ -4,6 +4,9 @@ const MASTER_KEY = "TeamCodewave@2026";
 let finalProcessedImage = null;
 let editorCanvas, editorCtx;
 let isDrawing = false;
+
+let currentZoom = 1;
+
 const DistrictData = {
   "Andaman and Nicobar Islands": [
     "Port Blair",
@@ -484,6 +487,7 @@ window.handleFileSelect = function (event) {
       editorCanvas.width = img.width;
       editorCanvas.height = img.height;
       editorCtx.drawImage(img, 0, 0);
+      resetZoom();
       modal.style.display = "flex";
       setupEditorDrawingEvents();
     };
@@ -552,6 +556,54 @@ window.cancelRedaction = function () {
   finalProcessedImage = null;
 };
 
+// ZOOM & BRUSH FUNCTIONS (NEW ADDITION)
+
+window.updateBrushDisplay = function (val) {
+  document.getElementById("brushSizeDisplay").innerText = val + "px";
+};
+
+window.changeZoom = function (step) {
+  currentZoom += step;
+
+  if (currentZoom < 0.5) currentZoom = 0.5;
+  if (currentZoom > 3.0) currentZoom = 3.0;
+
+  applyZoom();
+};
+
+window.resetZoom = function () {
+  currentZoom = 1;
+  applyZoom();
+};
+
+function applyZoom() {
+  if (!editorCanvas) return;
+
+  editorCanvas.style.width = editorCanvas.width * currentZoom + "px";
+  editorCanvas.style.height = editorCanvas.height * currentZoom + "px";
+
+  const display = document.getElementById("zoomDisplay");
+  if (display) {
+    display.innerText = Math.round(currentZoom * 100) + "%";
+  }
+}
+
+function drawOnCanvas(e) {
+  const sizeInput = document.getElementById("brushSize");
+  const size = sizeInput ? parseInt(sizeInput.value, 10) : 30;
+
+  const rect = editorCanvas.getBoundingClientRect();
+
+  const scaleX = editorCanvas.width / rect.width;
+  const scaleY = editorCanvas.height / rect.height;
+
+  const x = (e.clientX - rect.left) * scaleX;
+  const y = (e.clientY - rect.top) * scaleY;
+
+  editorCtx.fillStyle = "black";
+
+  editorCtx.fillRect(x - size / 2, y - size / 2, size, size);
+}
 // districts update
 window.updateDistricts = function () {
   const stateSelect = document.getElementById("issuePlace");

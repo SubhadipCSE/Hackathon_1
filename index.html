@@ -118,7 +118,7 @@
             style="border: 1px solid #ccc; padding: 10px; width: 100%"
           />
           <p style="font-size: 0.75rem; color: #666; margin-top: 5px">
-            Supported: Images, PDF, Doc (Max: 5MB)
+            Supported: Images, PDF, Doc (Max: 1 MB)
           </p>
         </div>
 
@@ -174,13 +174,42 @@
         </div>
       </div>
     </div>
-<div id="redactionModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.9); justify-content:center; align-items:center; flex-direction:column;">
-    <div style="background:white; padding:20px; border-radius:10px; text-align:center; max-width:90%; max-height:90%; overflow:auto;">
-        <h3 style="color:black;">Draw Black Box to Hide Info</h3>
-        <canvas id="editorCanvas" style="border:2px solid red; cursor:crosshair; max-width:100%;"></canvas>
-        <div style="margin-top:20px;">
-            <button onclick="saveRedaction()" style="background:green; color:white; padding:10px 20px; border:none; cursor:pointer;">✅ Save & Use</button>
-            <button onclick="cancelRedaction()" style="background:red; color:white; padding:10px 20px; border:none; cursor:pointer;">❌ Cancel</button>
+ <div id="redactionModal" style="display:none;" class="modal-overlay">
+    <div class="modal-box">
+        <h2 style="color: #d32f2f; margin-bottom: 5px;">⚠️ Protect Your Identity</h2>
+        <p style="color: #555; font-size: 14px; margin-bottom: 15px;">
+            Before submitting, please <strong>black out</strong> sensitive details like 
+            <br>
+            <span style="background:#eee; padding:2px 5px; border-radius:4px;">Phone Number</span> 
+            <span style="background:#eee; padding:2px 5px; border-radius:4px;">Aadhaar/PAN</span> 
+            <span style="background:#eee; padding:2px 5px; border-radius:4px;">Faces</span>
+        </p>
+
+        <div class="toolbar" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 15px;">
+            
+            <div class="tool-group" style="display: flex; align-items: center; gap: 5px;">
+                <label for="brushSize" style="font-weight:bold;">⬛ Size:</label>
+                <input type="range" id="brushSize" min="10" max="100" value="30" oninput="updateBrushDisplay(this.value)">
+                <span id="brushSizeDisplay" style="font-weight:bold; color:#007bff;">30px</span>
+            </div>
+
+            <div class="zoom-controls" style="border-left: 2px solid #ddd; padding-left: 15px; display: flex; align-items: center; gap: 8px;">
+                <span style="font-weight:bold; color:#555;">🔍 Zoom:</span>
+                <button onclick="changeZoom(0.2)" class="btn-zoom" title="Zoom In" style="padding: 5px 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">➕</button>
+                <button onclick="changeZoom(-0.2)" class="btn-zoom" title="Zoom Out" style="padding: 5px 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">➖</button>
+                <button onclick="resetZoom()" class="btn-zoom" title="Reset 100%" style="padding: 5px 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">↺</button>
+                <span id="zoomDisplay" style="font-weight:bold; color:#555; min-width: 45px;">100%</span>
+            </div>
+
+        </div>
+
+        <div class="canvas-wrapper" id="canvasContainer" style="overflow: auto; max-height: 50vh; border: 2px dashed #ccc; display: flex; align-items: flex-start; justify-content: center; background: #e9ecef;">
+            <canvas id="editorCanvas"></canvas>
+        </div>
+
+        <div class="modal-buttons" style="margin-top: 15px;">
+            <button onclick="saveRedaction()" class="btn-save">✅ Save & Attach</button>
+            <button onclick="cancelRedaction()" class="btn-cancel">❌ Cancel</button>
         </div>
     </div>
 </div>
