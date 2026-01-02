@@ -1,6 +1,9 @@
-// ==========================================
-// 1. DATA & CONFIGURATION
-// ==========================================
+//  DATA & CONFIGURATION
+
+const MASTER_KEY = "TeamCodewave@2026";
+let finalProcessedImage = null;
+let editorCanvas, editorCtx;
+let isDrawing = false;
 const DistrictData = {
   "Andaman and Nicobar Islands": [
     "Port Blair",
@@ -458,7 +461,98 @@ const DistrictData = {
   ],
 };
 
-// আপনার app.js ফাইলে ফাংশনটি এভাবে লিখুন
+// IMAGE EDITOR & CANVAS LOGIC
+
+// File select korle ei function ti trigger hobe
+window.handleFileSelect = function (event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const modal = document.getElementById("redactionModal");
+  editorCanvas = document.getElementById("editorCanvas");
+
+  if (!modal || !editorCanvas) {
+    return;
+  }
+
+  editorCtx = editorCanvas.getContext("2d");
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    const img = new Image();
+    img.onload = function () {
+      editorCanvas.width = img.width;
+      editorCanvas.height = img.height;
+      editorCtx.drawImage(img, 0, 0);
+      modal.style.display = "flex";
+      setupEditorDrawingEvents();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+// edit event korar logic
+function setupEditorDrawingEvents() {
+  if (!editorCanvas) return;
+
+  editorCanvas.onmousedown = (e) => {
+    isDrawing = true;
+    drawOnCanvas(e);
+  };
+  editorCanvas.onmouseup = () => {
+    isDrawing = false;
+    editorCtx.beginPath();
+  };
+  editorCanvas.onmousemove = (e) => {
+    if (isDrawing) drawOnCanvas(e);
+  };
+
+  // mobile er jonno
+  editorCanvas.addEventListener("touchstart", (e) => {
+    isDrawing = true;
+    drawOnCanvas(e.touches[0]);
+    e.preventDefault();
+  });
+  editorCanvas.addEventListener("touchmove", (e) => {
+    if (isDrawing) drawOnCanvas(e.touches[0]);
+    e.preventDefault();
+  });
+  editorCanvas.addEventListener("touchend", () => {
+    isDrawing = false;
+  });
+}
+
+// Edit korar function
+function drawOnCanvas(e) {
+  const rect = editorCanvas.getBoundingClientRect();
+  const scaleX = editorCanvas.width / rect.width;
+  const scaleY = editorCanvas.height / rect.height;
+
+  const x = (e.clientX - rect.left) * scaleX;
+  const y = (e.clientY - rect.top) * scaleY;
+
+  editorCtx.fillStyle = "black";
+  editorCtx.fillRect(x - 20, y - 20, 40, 40); // ৪০ পিক্সেল সাইজের বক্স
+}
+
+// ৪. Edit Save Button
+window.saveRedaction = function () {
+  if (editorCanvas) {
+    finalProcessedImage = editorCanvas.toDataURL("image/jpeg", 0.8);
+    document.getElementById("redactionModal").style.display = "none";
+    alert("Image Processed! Now you can submit.");
+  }
+};
+
+//  Edit Cancel Button
+window.cancelRedaction = function () {
+  document.getElementById("redactionModal").style.display = "none";
+  document.getElementById("evidenceFile").value = ""; // ফাইল ইনপুট ক্লিয়ার
+  finalProcessedImage = null;
+};
+
+// districts update
 window.updateDistricts = function () {
   const stateSelect = document.getElementById("issuePlace");
   const citySelect = document.getElementById("issueCity");
@@ -489,23 +583,22 @@ const firebaseConfig = {
   measurementId: "G-8FHZ033TL7",
 };
 
-// ফাইল রিড এবং এনক্রিপ্ট করার গ্লোবাল ফাংশন
+// evidence file encryption kora
 async function encryptFile(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const fileData = e.target.result;
-                // AES Encryption - হ্যাকাথনের সময় একটি কঠিন কী (Key) ব্যবহার করবেন
-                const encrypted = CryptoJS.AES.encrypt(fileData, "TeamCodewaveSecretKey2026").toString();
-                resolve(encrypted);
-            } catch (err) {
-                reject(err);
-            }
-        };
-        reader.onerror = (err) => reject(err);
-        reader.readAsDataURL(file);
-    });
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        const fileData = e.target.result;
+        const encrypted = CryptoJS.AES.encrypt(fileData, MASTER_KEY).toString();
+        resolve(encrypted);
+      } catch (err) {
+        reject(err);
+      }
+    };
+    reader.onerror = (err) => reject(err);
+    reader.readAsDataURL(file);
+  });
 }
 
 if (!firebase.apps.length) {
@@ -514,63 +607,82 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 let currentDocId = "";
 
-// ==========================================
-// 2. CITIZEN: REGISTRATION & TRACKING
-// ==========================================
+// 2 CITIZEN REGISTRATION & TRACKING
+
 async function submitComplaint() {
-    const category = document.getElementById("category").value;
-    const state = document.getElementById("issuePlace").value;
-    const city = document.getElementById("issueCity").value;
-    const dateOfIncident = document.getElementById("incidentDate").value;
-    const description = document.getElementById("complaintText").value;
-    
-    // ফাইল ইনপুট এলিমেন্ট ধরা
-    const fileInput = document.getElementById("evidenceFile");
+  const category = document.getElementById("category").value;
+  const state = document.getElementById("issuePlace").value;
+  const city = document.getElementById("issueCity").value;
+  const dateOfIncident = document.getElementById("incidentDate").value;
+  const description = document.getElementById("complaintText").value;
+  const fileInput = document.getElementById("evidenceFile");
 
-    if (!category || !state || !city || !dateOfIncident || !description) {
-        alert("Please fill all fields!");
+  // Validation check
+  if (!category || !state || !city || !dateOfIncident || !description) {
+    alert("Please fill all fields!");
+    return;
+  }
+
+  let encryptedEvidence = null;
+
+  try {
+    console.log("Checking for edited image...");
+
+    if (finalProcessedImage) {
+      console.log("Encrypting EDITED image...");
+      encryptedEvidence = CryptoJS.AES.encrypt(
+        finalProcessedImage,
+        MASTER_KEY
+      ).toString();
+    } else if (fileInput && fileInput.files.length > 0) {
+      console.log("Encrypting ORIGINAL file...");
+      const file = fileInput.files[0];
+
+      if (file.size > 700 * 1024) {
+        alert("File too large! Max 700KB allowed.");
         return;
-    }
+      }
 
-    let encryptedEvidence = null;
-
-    // --- এই অংশটুকু এখানে বসান ---
-    if (fileInput && fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        // ফায়ারবেস লিমিট ১ মেগাবাইট, এনক্রিপশনে সাইজ বাড়ে, তাই ৭০০ কেবি রাখা নিরাপদ
-        if (file.size > 700 * 1024) { 
-            alert("File too large! For Firestore storage, please upload a file under 700KB.");
-            return;
-        }
-        encryptedEvidence = await encryptFile(file);
+      const base64Raw = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      encryptedEvidence = CryptoJS.AES.encrypt(
+        base64Raw,
+        MASTER_KEY
+      ).toString();
     }
-    // ----------------------------
+    // ---------------------
 
     const randomID = "GOI-" + Math.floor(100000 + Math.random() * 900000);
-    
-    try {
-        await db.collection("complaints").add({
-            complaintID: randomID,
-            category: category,
-            state: state,
-            city: city,
-            incidentDate: dateOfIncident,
-            description: description,
-            evidence: encryptedEvidence, // এখানে এনক্রিপ্ট হওয়া ফাইল ডাটা সেভ হচ্ছে
-            status: "Pending",
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        });
 
-        // সাকসেস মেসেজ ও বাটন হাইড
-        document.getElementById('submitBtn').style.display = 'none';
-        document.getElementById("result").classList.remove("hidden");
-        document.getElementById("complaintID").innerText = randomID;
-        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+    // firebase e store kora
+    await db.collection("complaints").add({
+      complaintID: randomID,
+      category: category,
+      state: state,
+      city: city,
+      incidentDate: dateOfIncident,
+      description: description,
+      evidence: encryptedEvidence,
+      status: "Pending",
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
 
-    } catch (e) {
-        console.error("Error adding document: ", e);
-        alert("Upload failed due to file size or connection issue.");
-    }
+    // success hoye gele
+    document.getElementById("submitBtn").style.display = "none";
+    document.getElementById("result").classList.remove("hidden");
+    document.getElementById("complaintID").innerText = randomID;
+    document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+
+    // variable reset
+    finalProcessedImage = null;
+  } catch (e) {
+    console.error("Submission Error:", e);
+    alert("Upload failed. Check Console.");
+  }
 }
 
 async function trackStatus() {
@@ -590,7 +702,7 @@ async function trackStatus() {
       const data = doc.data();
       resultBox.classList.remove("hidden");
 
-      // ১. অভিযোগের তারিখ এবং বয়স সেট করা
+      // complaint date r complaint ta kotodin hoyechhe ta janar jonno
       if (data.timestamp) {
         const createdDate = data.timestamp.toDate();
         document.getElementById("time-submitted").innerText =
@@ -601,13 +713,13 @@ async function trackStatus() {
         document.getElementById("displayAge").innerText = diffDays;
       }
 
-      // ২. বেসিক ডিটেইলস (Authority এবং Status)
+      // kothay achhe setar details dekhar jonno
       document.getElementById("displayAuthority").innerText =
         data.handoverTo || "Central Processing Cell";
       document.getElementById("displayStatus").innerText = data.status;
       document.getElementById("displayCat").innerText = data.category;
 
-      // ৩. রোডম্যাপ আপডেট করার মেইন লজিক (যা আপনি খুঁজছেন)
+      // Status er road map mane complaint ta kothay achhe seta dekhar jonno
       resetRoadmap();
       document.getElementById("step-pending").classList.add("completed");
 
@@ -637,7 +749,7 @@ async function trackStatus() {
           : "Date Not Available";
         document.getElementById("time-rejected").innerText = updateTime;
 
-        // রিজেক্ট হলে রিমার্কস লাল রঙে হাইলাইট হবে
+        // if reject then it will highlight with color red
         document.getElementById(
           "displayRemarks"
         ).innerHTML = `<span style="color: #d32f2f; font-weight: bold;">Reason: ${
@@ -661,17 +773,12 @@ function resetRoadmap() {
     const el = document.getElementById(s);
     if (el) {
       el.classList.remove("active", "completed", "active-rejected");
-      if (s === "step-rejected") el.style.display = "none"; // রিজেক্টড নোড অফ করা
+      if (s === "step-rejected") el.style.display = "none";
     }
   });
 }
 
-// ==========================================
-// 3. OFFICER: ADMIN DASHBOARD
-// ==========================================
-// ==========================================
-// 3. OFFICER: ADMIN DASHBOARD (Puro Replace Korbe)
-// ==========================================
+// ADMIN CONTROL SECTION
 
 function loadAdminData() {
   db.collection("complaints")
@@ -739,58 +846,60 @@ window.toggleDropdown = function (id) {
   el.classList.toggle("hidden");
 };
 
-// View Details Function (Alert Show Korbe)
-// View Details Modal Open
-window.viewDetails = async function(docId) {
-    try {
-        const doc = await db.collection("complaints").doc(docId).get();
-        const data = doc.data();
-        
-        // সাধারণ তথ্য বসানো
-        document.getElementById("dt-id").innerText = data.complaintID;
-        document.getElementById("dt-cat").innerText = data.category;
-        document.getElementById("dt-loc").innerText = `${data.state || 'N/A'}, ${data.city || ''}`;
-        document.getElementById("dt-date").innerText = data.incidentDate || 'N/A';
-        document.getElementById("dt-desc").innerText = data.description;
-        document.getElementById("dt-status").innerText = data.status;
-        document.getElementById("dt-remarks").innerText = data.remarks || "No remarks yet.";
+// Eta complaint Details dekhar jonno
+window.viewDetails = async function (docId) {
+  try {
+    const doc = await db.collection("complaints").doc(docId).get();
+    const data = doc.data();
 
-        // --- এভিডেন্স ডিক্রিপশন লজিক ---
-        const imgTag = document.getElementById("dt-evidence-img");
-        const downloadLink = document.getElementById("dt-evidence-download");
-        const noEvMsg = document.getElementById("no-evidence");
+    // Grivence list er details
+    document.getElementById("dt-id").innerText = data.complaintID;
+    document.getElementById("dt-cat").innerText = data.category;
+    document.getElementById("dt-loc").innerText = `${data.state || "N/A"}, ${
+      data.city || ""
+    }`;
+    document.getElementById("dt-date").innerText = data.incidentDate || "N/A";
+    document.getElementById("dt-desc").innerText = data.description;
+    document.getElementById("dt-status").innerText = data.status;
+    document.getElementById("dt-remarks").innerText =
+      data.remarks || "No remarks yet.";
 
-        if (data.evidence) {
-            try {
-                // CryptoJS দিয়ে ডিক্রিপ্ট করা (অবশ্যই এনক্রিপশনের সময়ের 'Secret Key' ব্যবহার করতে হবে)
-                const bytes = CryptoJS.AES.decrypt(data.evidence, "TeamCodewaveSecretKey2026");
-                const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+    // evidence decrypt kora ekhane
+    const imgTag = document.getElementById("dt-evidence-img");
+    const downloadLink = document.getElementById("dt-evidence-download");
+    const noEvMsg = document.getElementById("no-evidence");
 
-                if (decryptedData) {
-                    imgTag.src = decryptedData;
-                    imgTag.style.display = "block";
-                    downloadLink.href = decryptedData;
-                    downloadLink.style.display = "inline-block";
-                    noEvMsg.style.display = "none";
-                }
-            } catch (err) {
-                console.error("Decryption failed:", err);
-                noEvMsg.innerText = "❌ Failed to decrypt evidence (Invalid Key).";
-            }
-        } else {
-            imgTag.style.display = "none";
-            downloadLink.style.display = "none";
-            noEvMsg.style.display = "block";
+    if (data.evidence) {
+      try {
+        // CryptoJS Use kore Data decrypt kora hoyechhe ekhane
+        const bytes = CryptoJS.AES.decrypt(data.evidence, MASTER_KEY);
+        const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+
+        if (decryptedData) {
+          imgTag.src = decryptedData;
+          imgTag.style.display = "block";
+          downloadLink.href = decryptedData;
+          downloadLink.style.display = "inline-block";
+          noEvMsg.style.display = "none";
         }
-
-        // মোডাল দেখানো
-        document.getElementById("viewModal").classList.remove("hidden");
-    } catch (e) {
-        console.error("Error:", e);
-        alert("Could not load details.");
+      } catch (err) {
+        console.error("Decryption failed:", err);
+        noEvMsg.innerText = "❌ Failed to decrypt evidence (Invalid Key).";
+      }
+    } else {
+      imgTag.style.display = "none";
+      downloadLink.style.display = "none";
+      noEvMsg.style.display = "block";
     }
+
+    // model dekhanor jonno
+    document.getElementById("viewModal").classList.remove("hidden");
+  } catch (e) {
+    console.error("Error:", e);
+    alert("Could not load details.");
+  }
 };
-// View Details Modal Close
+// View Details Modal Close hobe ekhane
 window.closeViewModal = function () {
   document.getElementById("viewModal").classList.add("hidden");
 };
@@ -827,8 +936,8 @@ window.closeModal = function () {
 
 window.saveAction = async function () {
   const status = document.getElementById("newStatus").value;
-  const handover = document.getElementById("handoverDept").value; // এই ফিল্ডটিই Authority হিসেবে কাজ করে
-  const remarks = document.getElementById("officerRemarks").value; // এই ফিল্ডটিই 'কেন' তার উত্তর দেয়
+  const handover = document.getElementById("handoverDept").value; // Handed Over Option
+  const remarks = document.getElementById("officerRemarks").value; // kothay achhe tar remark
 
   if (!currentDocId) return;
 

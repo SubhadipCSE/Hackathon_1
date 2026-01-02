@@ -109,35 +109,92 @@
           ></textarea>
         </div>
         <div class="form-group">
-    <label>Upload Evidence (Optional)</label>
-    <input type="file" id="evidenceFile" accept="image/*, .pdf, .doc, .docx" style="border: 1px solid #ccc; padding: 10px; width: 100%;">
-    <p style="font-size: 0.75rem; color: #666; margin-top: 5px;">Supported: Images, PDF, Doc (Max: 5MB)</p>
-</div>
+          <label>Upload Evidence (Optional)</label>
+          <input
+            type="file"
+            id="evidenceFile"
+            onchange="handleFileSelect(event)"
+            accept="image/*, .pdf, .doc, .docx"
+            style="border: 1px solid #ccc; padding: 10px; width: 100%"
+          />
+          <p style="font-size: 0.75rem; color: #666; margin-top: 5px">
+            Supported: Images, PDF, Doc (Max: 5MB)
+          </p>
+        </div>
 
         <button class="btn-submit" id="submitBtn" onclick="submitComplaint()">
           Submit Securely
         </button>
 
         <div id="result" class="result-box hidden">
-    <h3 style="color: #138808;">✔️ Registration Successful</h3>
-    <p>Please note your Unique Grievance ID for tracking:</p>
-    <div class="id-text" id="complaintID" style="background: #eef2f7; padding: 15px; font-weight: bold; font-size: 1.5rem; letter-spacing: 2px;"></div>
-    
-    <div style="background: #fff5f5; border: 2px solid #fc8181; padding: 15px; border-radius: 8px; margin-top: 20px;">
-        <p style="color: #c53030; font-weight: bold; margin-bottom: 5px;">⚠️ CRITICAL WARNING / সতর্কবার্তা:</p>
-        <p style="color: #2d3748; font-size: 0.9rem; line-height: 1.4;">
-            This portal is strictly **ANONYMOUS**. We do not store your name, email, or phone number. 
-            <strong>If you lose this Complaint ID, it is IMPOSSIBLE to recover it or track your grievance.</strong> 
-            Please take a screenshot or write it down immediately.
-            <br><br>
-            আপনার এই অভিযোগটি সম্পূর্ণ বেনামী। আমরা আপনার নাম বা ফোন নম্বর সংরক্ষণ করি না। 
-            <strong>যদি আপনি এই কমপ্লেন আইডিটি হারিয়ে ফেলেন, তবে অভিযোগটি ট্র্যাক করার আর কোনো উপায় থাকবে না।</strong> 
-            দয়া করে আইডিটি এখনই নোট করে নিন বা স্ক্রিনশট নিন।
-        </p>
-    </div>
-</div>
+          <h3 style="color: #138808">✔️ Registration Successful</h3>
+          <p>Please note your Unique Grievance ID for tracking:</p>
+          <div
+            class="id-text"
+            id="complaintID"
+            style="
+              background: #eef2f7;
+              padding: 15px;
+              font-weight: bold;
+              font-size: 1.5rem;
+              letter-spacing: 2px;
+            "
+          ></div>
+
+          <div
+            style="
+              background: #fff5f5;
+              border: 2px solid #fc8181;
+              padding: 15px;
+              border-radius: 8px;
+              margin-top: 20px;
+            "
+          >
+            <p style="color: #c53030; font-weight: bold; margin-bottom: 5px">
+              ⚠️ CRITICAL WARNING / সতর্কবার্তা:
+            </p>
+            <p style="color: #2d3748; font-size: 0.9rem; line-height: 1.4">
+              This portal is strictly **ANONYMOUS**. We do not store your name,
+              email, or phone number.
+              <strong
+                >If you lose this Complaint ID, it is IMPOSSIBLE to recover it
+                or track your grievance.</strong
+              >
+              Please take a screenshot or write it down immediately.
+              <br /><br />
+              আপনার এই অভিযোগটি সম্পূর্ণ বেনামী। আমরা আপনার নাম বা ফোন নম্বর
+              সংরক্ষণ করি না।
+              <strong
+                >যদি আপনি এই কমপ্লেন আইডিটি হারিয়ে ফেলেন, তবে অভিযোগটি ট্র্যাক
+                করার আর কোনো উপায় থাকবে না।</strong
+              >
+              দয়া করে আইডিটি এখনই নোট করে নিন বা স্ক্রিনশট নিন।
+            </p>
+          </div>
+        </div>
       </div>
     </div>
+<div id="redactionModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.9); justify-content:center; align-items:center; flex-direction:column;">
+    <div style="background:white; padding:20px; border-radius:10px; text-align:center; max-width:90%; max-height:90%; overflow:auto;">
+        <h3 style="color:black;">Draw Black Box to Hide Info</h3>
+        <canvas id="editorCanvas" style="border:2px solid red; cursor:crosshair; max-width:100%;"></canvas>
+        <div style="margin-top:20px;">
+            <button onclick="saveRedaction()" style="background:green; color:white; padding:10px 20px; border:none; cursor:pointer;">✅ Save & Use</button>
+            <button onclick="cancelRedaction()" style="background:red; color:white; padding:10px 20px; border:none; cursor:pointer;">❌ Cancel</button>
+        </div>
+    </div>
+</div>
+    <!-- <div id="canvasModal" class="modal hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:none; flex-direction:column; align-items:center; justify-content:center;">
+    <div style="background:white; padding:20px; border-radius:10px; text-align:center; max-width:90%;">
+        <h3>Draw to Hide Personal Info</h3>
+        <p>Use your mouse/finger to draw black boxes over sensitive info.</p>
+        <canvas id="redactCanvas" style="border:1px solid #000; cursor:crosshair; max-width:100%; height:auto;"></canvas>
+        <div style="margin-top:15px;">
+            <button onclick="saveRedaction()" style="padding:10px 20px; background:green; color:white; border:none; border-radius:5px;">Done & Save</button>
+            <button onclick="closeCanvas()" style="padding:10px 20px; background:red; color:white; border:none; border-radius:5px;">Cancel</button>
+        </div>
+    </div>
+</div> -->
 
     <footer class="gov-footer">
       <div class="footer-content">
@@ -154,7 +211,7 @@
         </div>
       </div>
     </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="app.js"></script>

@@ -492,3 +492,83 @@ td {
     color: #b91c1c; /* রিজেকশন কারণ লাল রঙে দেখাবে */
     font-weight: 500;
 }
+
+/* মোডাল কন্টেন্ট যাতে স্ক্রিনের বাইরে না যায় */
+#viewModal > div {
+    max-height: 90vh; /* স্ক্রিনের ৯০% এর বেশি লম্বা হবে না */
+    overflow-y: auto; /* বেশি বড় হলে স্ক্রল করা যাবে */
+    width: 90%;       /* মোবাইলেও ঠিকঠাক দেখাবে */
+    max-width: 500px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    position: relative;
+}
+
+/* ছবি যাতে বেশি বড় হয়ে জায়গা নষ্ট না করে */
+#dt-evidence-img {
+    max-width: 100%;
+    max-height: 250px; /* ছবির উচ্চতা লিমিট করা হলো */
+    object-fit: contain;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* মোডাল ব্যাকগ্রাউন্ড (কালো ঝাপসা) */
+.modal {
+    position: fixed;
+    z-index: 9999; /* সবার উপরে থাকবে */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.8); /* গাঢ় ব্যাকগ্রাউন্ড */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* মোডাল লুকানোর ক্লাস */
+.modal.hidden {
+    display: none !important;
+}
+
+/* এডিটর বক্সের ডিজাইন */
+.editor-box {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 95%;
+    max-width: 700px; /* খুব বেশি বড় হবে না */
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* ক্যানভাস কন্টেইনার (স্ক্রল করার জন্য) */
+.canvas-container {
+    max-height: 60vh; /* স্ক্রিনের ৬০% এর বেশি লম্বা হবে না */
+    overflow: auto;   /* ছবি বড় হলে স্ক্রল করা যাবে */
+    border: 2px solid #ddd;
+    margin: 15px 0;
+    background: #eee;
+}
+
+/* ক্যানভাস কার্সার */
+#editorCanvas {
+    cursor: crosshair; /* মাউস পয়েন্টার প্লাস চিহ্ন হবে */
+    display: block;
+    margin: auto;
+}
+
+.editor-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 15px;
+}
