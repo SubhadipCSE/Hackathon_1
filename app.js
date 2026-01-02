@@ -741,31 +741,55 @@ window.toggleDropdown = function (id) {
 
 // View Details Function (Alert Show Korbe)
 // View Details Modal Open
-window.viewDetails = async function (docId) {
-  try {
-    const doc = await db.collection("complaints").doc(docId).get();
-    const data = doc.data();
+window.viewDetails = async function(docId) {
+    try {
+        const doc = await db.collection("complaints").doc(docId).get();
+        const data = doc.data();
+        
+        // সাধারণ তথ্য বসানো
+        document.getElementById("dt-id").innerText = data.complaintID;
+        document.getElementById("dt-cat").innerText = data.category;
+        document.getElementById("dt-loc").innerText = `${data.state || 'N/A'}, ${data.city || ''}`;
+        document.getElementById("dt-date").innerText = data.incidentDate || 'N/A';
+        document.getElementById("dt-desc").innerText = data.description;
+        document.getElementById("dt-status").innerText = data.status;
+        document.getElementById("dt-remarks").innerText = data.remarks || "No remarks yet.";
 
-    // মোডালের ভেতরে ডেটা বসানো
-    document.getElementById("dt-id").innerText = data.complaintID;
-    document.getElementById("dt-cat").innerText = data.category;
-    document.getElementById("dt-loc").innerText = `${data.state || "N/A"}, ${
-      data.city || ""
-    }`;
-    document.getElementById("dt-date").innerText = data.incidentDate || "N/A";
-    document.getElementById("dt-desc").innerText = data.description;
-    document.getElementById("dt-status").innerText = data.status;
-    document.getElementById("dt-remarks").innerText =
-      data.remarks || "No remarks yet.";
+        // --- এভিডেন্স ডিক্রিপশন লজিক ---
+        const imgTag = document.getElementById("dt-evidence-img");
+        const downloadLink = document.getElementById("dt-evidence-download");
+        const noEvMsg = document.getElementById("no-evidence");
 
-    // মোডাল দেখানো
-    document.getElementById("viewModal").classList.remove("hidden");
-  } catch (e) {
-    console.error("Error:", e);
-    alert("Could not load details.");
-  }
+        if (data.evidence) {
+            try {
+                // CryptoJS দিয়ে ডিক্রিপ্ট করা (অবশ্যই এনক্রিপশনের সময়ের 'Secret Key' ব্যবহার করতে হবে)
+                const bytes = CryptoJS.AES.decrypt(data.evidence, "TeamCodewaveSecretKey2026");
+                const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+
+                if (decryptedData) {
+                    imgTag.src = decryptedData;
+                    imgTag.style.display = "block";
+                    downloadLink.href = decryptedData;
+                    downloadLink.style.display = "inline-block";
+                    noEvMsg.style.display = "none";
+                }
+            } catch (err) {
+                console.error("Decryption failed:", err);
+                noEvMsg.innerText = "❌ Failed to decrypt evidence (Invalid Key).";
+            }
+        } else {
+            imgTag.style.display = "none";
+            downloadLink.style.display = "none";
+            noEvMsg.style.display = "block";
+        }
+
+        // মোডাল দেখানো
+        document.getElementById("viewModal").classList.remove("hidden");
+    } catch (e) {
+        console.error("Error:", e);
+        alert("Could not load details.");
+    }
 };
-
 // View Details Modal Close
 window.closeViewModal = function () {
   document.getElementById("viewModal").classList.add("hidden");

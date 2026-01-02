@@ -7,134 +7,235 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header class="gov-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 5%;">
-    <div class="emblem-section">
+    <header
+      class="gov-header"
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 5%;
+      "
+    >
+      <div class="emblem-section">
         <div class="gov-title">
-            <h2>Team Codewave of India</h2>
-            <p>Internal Grievance Management System</p>
+          <h2>Team Codewave of India</h2>
+          <p>Internal Grievance Management System</p>
         </div>
-    </div>
+      </div>
 
-    <div class="user-profile" style="display: flex; align-items: center; gap: 15px;">
-        <div class="profile-text" style="text-align: right;">
-            <span id="userName" style="display: block; font-weight: bold; color: #000080;">Officer Name</span>
-            <small style="color: #666;">Status: Online</small>
+      <div
+        class="user-profile"
+        style="display: flex; align-items: center; gap: 15px"
+      >
+        <div class="profile-text" style="text-align: right">
+          <span
+            id="userName"
+            style="display: block; font-weight: bold; color: #000080"
+            >Officer Name</span
+          >
+          <small style="color: #666">Status: Online</small>
         </div>
-        <button onclick="logoutAdmin()" style="background: #d32f2f; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Logout</button>
-    </div>
-</header>
+        <button
+          onclick="logoutAdmin()"
+          style="
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+          "
+        >
+          Logout
+        </button>
+      </div>
+    </header>
 
     <div class="admin-main">
-        <div class="stats-container">
-            <div class="stat-card">
-                <h3>Total Received</h3>
-                <p id="count-total">0</p>
-            </div>
-            <div class="stat-card" style="border-bottom-color: #ff9933">
-                <h3>Pending Action</h3>
-                <p id="count-pending">0</p>
-            </div>
-            <div class="stat-card" style="border-bottom-color: #000080">
-                <h3>Handed Over</h3>
-                <p id="count-handedover">0</p>
-            </div>
-            <div class="stat-card" style="border-bottom-color: #138808">
-                <h3>Resolved Cases</h3>
-                <p id="count-resolved">0</p>
-            </div>
+      <div class="stats-container">
+        <div class="stat-card">
+          <h3>Total Received</h3>
+          <p id="count-total">0</p>
         </div>
-
-        <div class="search-section" style="margin-bottom: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <label style="font-weight: bold; color: #000080;">🔍 Search Grievance:</label>
-                <input type="text" id="adminSearchInput" onkeyup="filterAdminTable()" placeholder="Enter Grievance ID (e.g., GOI-123)..." 
-                       style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
-            </div>
+        <div class="stat-card" style="border-bottom-color: #ff9933">
+          <h3>Pending Action</h3>
+          <p id="count-pending">0</p>
         </div>
+        <div class="stat-card" style="border-bottom-color: #000080">
+          <h3>Handed Over</h3>
+          <p id="count-handedover">0</p>
+        </div>
+        <div class="stat-card" style="border-bottom-color: #138808">
+          <h3>Resolved Cases</h3>
+          <p id="count-resolved">0</p>
+        </div>
+      </div>
 
-        <div class="table-responsive">
-    <table id="complaintTable">
-        <thead>
+      <div
+        class="search-section"
+        style="
+          margin-bottom: 20px;
+          background: white;
+          padding: 15px;
+          border-radius: 8px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        "
+      >
+        <div style="display: flex; gap: 10px; align-items: center">
+          <label style="font-weight: bold; color: #000080"
+            >🔍 Search Grievance:</label
+          >
+          <input
+            type="text"
+            id="adminSearchInput"
+            onkeyup="filterAdminTable()"
+            placeholder="Enter Grievance ID (e.g., GOI-123)..."
+            style="
+              flex: 1;
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+              font-size: 1rem;
+            "
+          />
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="complaintTable">
+          <thead>
             <tr>
-                <th>Grievance ID</th>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Handover To</th>
-                <th>Action</th>
+              <th>Grievance ID</th>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Handover To</th>
+              <th>Action</th>
             </tr>
-        </thead>
-        <tbody id="adminTableBody"></tbody>
-    </table>
-</div>
+          </thead>
+          <tbody id="adminTableBody"></tbody>
+        </table>
+      </div>
     </div>
 
-     
-
     <div id="actionModal" class="modal hidden">
-    <div class="modal-content admin-modal">
-        <h3 style="border-bottom: 2px solid var(--gov-orange); padding-bottom: 10px;">🛠️ Official Action & Handover</h3>
-        
-        <p style="font-size: 0.85rem; background: #f1f5f9; padding: 10px; border-radius: 4px;">
-            <strong>Processing ID:</strong> <span id="modalID"></span>
+      <div class="modal-content admin-modal">
+        <h3
+          style="
+            border-bottom: 2px solid var(--gov-orange);
+            padding-bottom: 10px;
+          "
+        >
+          🛠️ Official Action & Handover
+        </h3>
+
+        <p
+          style="
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 4px;
+          "
+        >
+          <strong>Processing ID:</strong> <span id="modalID"></span>
         </p>
 
         <div class="modal-grid">
-            <div class="form-group">
-                <label>Update Status</label>
-                <select id="newStatus">
-                    <option value="In Progress">🟡 In Progress</option>
-                    <option value="Handed Over">🔵 Handed Over</option>
-                    <option value="Resolved">🟢 Resolved</option>
-                    <option value="Rejected">🔴 Rejected</option>
-                </select>
-            </div>
+          <div class="form-group">
+            <label>Update Status</label>
+            <select id="newStatus">
+              <option value="In Progress">🟡 In Progress</option>
+              <option value="Handed Over">🔵 Handed Over</option>
+              <option value="Resolved">🟢 Resolved</option>
+              <option value="Rejected">🔴 Rejected</option>
+            </select>
+          </div>
 
-            <div class="form-group">
-                <label>Assign To Department</label>
-                <select id="handoverDept">
-                    <optgroup label="Supreme Authority">
-                        <option value="President's Secretariat">President's Secretariat (Rashtrapati Bhavan)</option>
-                        <option value="Prime Minister's Office">Prime Minister's Office (PMO)</option>
-                    </optgroup>
-                    <optgroup label="Internal Affairs & Justice">
-                        <option value="Ministry of Home Affairs">Ministry of Home Affairs (MHA)</option>
-                        <option value="Supreme Court of India">Supreme Court of India</option>
-                        <option value="Central Vigilance Commission">Central Vigilance Commission (CVC)</option>
-                    </optgroup>
-                    <optgroup label="Enforcement Agencies">
-                        <option value="CBI">Central Bureau of Investigation (CBI)</option>
-                        <option value="Cyber Crime Cell">Cyber Crime Cell (National Unit)</option>
-                        <option value="Anti-Corruption Bureau">Anti-Corruption Bureau (ACB)</option>
-                        <option value="Local Police HQ">State/Local Police HQ</option>
-                    </optgroup>
-                    <optgroup label="Public Services">
-                        <option value="Municipal Corporation">Municipal Corporation (Civic Body)</option>
-                        <option value="Ministry of Health">Ministry of Health & Family Welfare</option>
-                        <option value="NHRC">National Human Rights Commission (NHRC)</option>
-                    </optgroup>
-                </select>
-            </div>
+          <div class="form-group">
+            <label>Assign To Department</label>
+            <select id="handoverDept">
+              <optgroup label="Supreme Authority">
+                <option value="President's Secretariat">
+                  President's Secretariat (Rashtrapati Bhavan)
+                </option>
+                <option value="Prime Minister's Office">
+                  Prime Minister's Office (PMO)
+                </option>
+              </optgroup>
+              <optgroup label="Internal Affairs & Justice">
+                <option value="Ministry of Home Affairs">
+                  Ministry of Home Affairs (MHA)
+                </option>
+                <option value="Supreme Court of India">
+                  Supreme Court of India
+                </option>
+                <option value="Central Vigilance Commission">
+                  Central Vigilance Commission (CVC)
+                </option>
+              </optgroup>
+              <optgroup label="Enforcement Agencies">
+                <option value="CBI">
+                  Central Bureau of Investigation (CBI)
+                </option>
+                <option value="Cyber Crime Cell">
+                  Cyber Crime Cell (National Unit)
+                </option>
+                <option value="Anti-Corruption Bureau">
+                  Anti-Corruption Bureau (ACB)
+                </option>
+                <option value="Local Police HQ">State/Local Police HQ</option>
+              </optgroup>
+              <optgroup label="Public Services">
+                <option value="Municipal Corporation">
+                  Municipal Corporation (Civic Body)
+                </option>
+                <option value="Ministry of Health">
+                  Ministry of Health & Family Welfare
+                </option>
+                <option value="NHRC">
+                  National Human Rights Commission (NHRC)
+                </option>
+              </optgroup>
+            </select>
+          </div>
 
-            <div class="form-group">
-                <label>Official Remarks / Instructions</label>
-                <select id="officerRemarks">
-                    <option value="Under Review: Documents are being verified.">Under Review: Verification in progress</option>
-                    <option value="Action Taken: Forwarded to the respective department for immediate arrest/fine.">Action Taken: Forwarded for immediate action</option>
-                    <option value="Evidence Needed: Please provide more details via official mail.">Evidence Needed: Insufficient information</option>
-                    <option value="Resolved: The issue has been addressed and closed.">Resolved: Issue successfully closed</option>
-                    <option value="Closed: False allegation or out of jurisdiction.">Closed: Invalid/False allegation</option>
-                </select>
-            </div>
+          <div class="form-group">
+            <label>Official Remarks / Instructions</label>
+            <select id="officerRemarks">
+              <option value="Under Review: Documents are being verified.">
+                Under Review: Verification in progress
+              </option>
+              <option
+                value="Action Taken: Forwarded to the respective department for immediate arrest/fine."
+              >
+                Action Taken: Forwarded for immediate action
+              </option>
+              <option
+                value="Evidence Needed: Please provide more details via official mail."
+              >
+                Evidence Needed: Insufficient information
+              </option>
+              <option
+                value="Resolved: The issue has been addressed and closed."
+              >
+                Resolved: Issue successfully closed
+              </option>
+              <option value="Closed: False allegation or out of jurisdiction.">
+                Closed: Invalid/False allegation
+              </option>
+            </select>
+          </div>
         </div>
 
         <div class="modal-buttons">
-            <button class="btn-save" onclick="saveAction()">CONFIRM ACTION</button>
-            <button class="btn-cancel" onclick="closeModal()">CANCEL</button>
+          <button class="btn-save" onclick="saveAction()">
+            CONFIRM ACTION
+          </button>
+          <button class="btn-cancel" onclick="closeModal()">CANCEL</button>
         </div>
+      </div>
     </div>
-</div>
     <div id="viewModal" class="modal hidden">
     <div class="modal-content" style="border-top: 8px solid var(--gov-blue);">
         <h3 style="color: var(--gov-blue); border-bottom: 2px solid #eee; padding-bottom: 10px;">📋 Grievance Full Details</h3>
@@ -150,31 +251,46 @@
             </div>
             <p><strong>Current Status:</strong> <span id="dt-status" class="badge"></span></p>
             <p><strong>Official Remarks:</strong> <span id="dt-remarks"></span></p>
-        </div>
+
+            <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                <strong>📎 Evidence / Attachment:</strong>
+                <div id="evidence-container" style="margin-top: 10px; text-align: center;">
+                    <p id="no-evidence" style="color: #888;">No evidence uploaded.</p>
+                    <img id="dt-evidence-img" src="" style="max-width: 100%; border-radius: 5px; display: none; border: 1px solid #ddd;">
+                    <br>
+                    <a id="dt-evidence-download" href="#" download="evidence" class="btn-action" style="display: none; margin-top: 10px; text-decoration: none; font-size: 0.8rem;">⬇️ Download Evidence</a>
+                </div>
+            </div>
+            </div>
 
         <div class="modal-buttons" style="margin-top: 25px;">
             <button class="btn-cancel" onclick="closeViewModal()" style="width: 100%;">CLOSE VIEW</button>
         </div>
     </div>
 </div>
-<footer class="gov-footer">
-    <div class="footer-content">
+    <footer class="gov-footer">
+      <div class="footer-content">
         <div class="disclaimer-box">
-            <p><strong>🚨 PROTOTYPE DISCLAIMER:</strong> This website is developed solely for a Hackathon project by Team Codewave. This is <u>NOT</u> an official Government of India portal. No personal data is being misused.</p>
+          <p>
+            <strong>🚨 PROTOTYPE DISCLAIMER:</strong> This website is developed
+            solely for a Hackathon project by Team Codewave. This is
+            <u>NOT</u> an official Government of India portal. No personal data
+            is being misused.
+          </p>
         </div>
         <div class="footer-links">
-            <p>© 2026 Grievance Redressal System | Team Codewave</p>
-            <p>Powered by Firebase App Check & reCAPTCHA v3</p>
+          <p>© 2026 Grievance Redressal System | Team Codewave</p>
+          <p>Powered by Firebase App Check & reCAPTCHA v3</p>
         </div>
-    </div>
-</footer>
+      </div>
+    </footer>
     <script>
       // Security Check: Login chara page access kora jabe na
       if (sessionStorage.getItem("isLoggedIn") !== "true") {
         window.location.href = "admin_login.html";
       }
     </script>
-    
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="app.js"></script>
