@@ -565,8 +565,8 @@ window.updateBrushDisplay = function (val) {
 window.changeZoom = function (step) {
   currentZoom += step;
 
-  if (currentZoom < 0.5) currentZoom = 0.5;
-  if (currentZoom > 3.0) currentZoom = 3.0;
+  if (currentZoom < 0.1) currentZoom = 0.1;
+  if (currentZoom > 5.0) currentZoom = 5.0;
 
   applyZoom();
 };
@@ -1026,4 +1026,16 @@ function filterAdminTable() {
         txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
     }
   }
+}
+// DISCLAIMER CONTROL
+window.onload = function () {
+  const accepted = localStorage.getItem("disclaimerAccepted");
+  if (!accepted) {
+    document.getElementById("disclaimerModal").style.display = "flex";
+  }
+};
+
+function acceptDisclaimer() {
+  localStorage.setItem("disclaimerAccepted", "yes");
+  document.getElementById("disclaimerModal").style.display = "none";
 }

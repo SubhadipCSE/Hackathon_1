@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Officer Dashboard | Central Codewave</title>
+    <title>OFFICERS DASHBOARD | Central Codewave</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -31,10 +31,15 @@
           <span
             id="userName"
             style="display: block; font-weight: bold; color: #000080"
-            >Officer Name</span
           >
-          <small style="color: #666">Status: Online</small>
+            Officer Name
+          </span>
+
+          <small style="color: #138808; font-weight: bold">
+            ● Status: Online
+          </small>
         </div>
+        
         <button
           onclick="logoutAdmin()"
           style="
@@ -237,37 +242,99 @@
       </div>
     </div>
     <div id="viewModal" class="modal hidden">
-    <div class="modal-content" style="border-top: 8px solid var(--gov-blue);">
-        <h3 style="color: var(--gov-blue); border-bottom: 2px solid #eee; padding-bottom: 10px;">📋 Grievance Full Details</h3>
-        
-        <div id="fullDetailsContent" style="text-align: left; margin-top: 15px; line-height: 1.8;">
-            <p><strong>Grievance ID:</strong> <span id="dt-id"></span></p>
-            <p><strong>Category:</strong> <span id="dt-cat"></span></p>
-            <p><strong>Location:</strong> <span id="dt-loc"></span></p>
-            <p><strong>Date of Incident:</strong> <span id="dt-date"></span></p>
-            <div style="background: #f4f7f9; padding: 15px; border-radius: 5px; margin: 15px 0;">
-                <strong>Description:</strong><br>
-                <p id="dt-desc" style="margin: 5px 0; color: #444; white-space: pre-wrap;"></p>
-            </div>
-            <p><strong>Current Status:</strong> <span id="dt-status" class="badge"></span></p>
-            <p><strong>Official Remarks:</strong> <span id="dt-remarks"></span></p>
+      <div class="modal-content" style="border-top: 8px solid var(--gov-blue)">
+        <h3
+          style="
+            color: var(--gov-blue);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+          "
+        >
+          📋 Grievance Full Details
+        </h3>
 
-            <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
-                <strong>📎 Evidence / Attachment:</strong>
-                <div id="evidence-container" style="margin-top: 10px; text-align: center;">
-                    <p id="no-evidence" style="color: #888;">No evidence uploaded.</p>
-                    <img id="dt-evidence-img" src="" style="max-width: 100%; border-radius: 5px; display: none; border: 1px solid #ddd;">
-                    <br>
-                    <a id="dt-evidence-download" href="#" download="evidence" class="btn-action" style="display: none; margin-top: 10px; text-decoration: none; font-size: 0.8rem;">⬇️ Download Evidence</a>
-                </div>
-            </div>
-            </div>
+        <div
+          id="fullDetailsContent"
+          style="text-align: left; margin-top: 15px; line-height: 1.8"
+        >
+          <p><strong>Grievance ID:</strong> <span id="dt-id"></span></p>
+          <p><strong>Category:</strong> <span id="dt-cat"></span></p>
+          <p><strong>Location:</strong> <span id="dt-loc"></span></p>
+          <p><strong>Date of Incident:</strong> <span id="dt-date"></span></p>
+          <div
+            style="
+              background: #f4f7f9;
+              padding: 15px;
+              border-radius: 5px;
+              margin: 15px 0;
+            "
+          >
+            <strong>Description:</strong><br />
+            <p
+              id="dt-desc"
+              style="margin: 5px 0; color: #444; white-space: pre-wrap"
+            ></p>
+          </div>
+          <p>
+            <strong>Current Status:</strong>
+            <span id="dt-status" class="badge"></span>
+          </p>
+          <p>
+            <strong>Official Remarks:</strong> <span id="dt-remarks"></span>
+          </p>
 
-        <div class="modal-buttons" style="margin-top: 25px;">
-            <button class="btn-cancel" onclick="closeViewModal()" style="width: 100%;">CLOSE VIEW</button>
+          <div
+            style="
+              margin-top: 15px;
+              border-top: 1px solid #eee;
+              padding-top: 10px;
+            "
+          >
+            <strong>📎 Evidence / Attachment:</strong>
+            <div
+              id="evidence-container"
+              style="margin-top: 10px; text-align: center"
+            >
+              <p id="no-evidence" style="color: #888">No evidence uploaded.</p>
+              <img
+                id="dt-evidence-img"
+                src=""
+                style="
+                  max-width: 100%;
+                  border-radius: 5px;
+                  display: none;
+                  border: 1px solid #ddd;
+                "
+              />
+              <br />
+              <a
+                id="dt-evidence-download"
+                href="#"
+                download="evidence"
+                class="btn-action"
+                style="
+                  display: none;
+                  margin-top: 10px;
+                  text-decoration: none;
+                  font-size: 0.8rem;
+                "
+                >⬇️ Download Evidence</a
+              >
+            </div>
+          </div>
         </div>
+
+        <div class="modal-buttons" style="margin-top: 25px">
+          <button
+            class="btn-cancel"
+            onclick="closeViewModal()"
+            style="width: 100%"
+          >
+            CLOSE VIEW
+          </button>
+        </div>
+      </div>
     </div>
-</div>
     <footer class="gov-footer">
       <div class="footer-content">
         <div class="disclaimer-box">
@@ -290,7 +357,7 @@
         window.location.href = "admin_login.html";
       }
     </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="app.js"></script>

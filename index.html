@@ -195,8 +195,8 @@
 
             <div class="zoom-controls" style="border-left: 2px solid #ddd; padding-left: 15px; display: flex; align-items: center; gap: 8px;">
                 <span style="font-weight:bold; color:#555;">🔍 Zoom:</span>
-                <button onclick="changeZoom(0.2)" class="btn-zoom" title="Zoom In" style="padding: 5px 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">➕</button>
-                <button onclick="changeZoom(-0.2)" class="btn-zoom" title="Zoom Out" style="padding: 5px 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">➖</button>
+                <button onclick="changeZoom(0.1)" class="btn-zoom" title="Zoom In" style="padding: 5px 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">➕</button>
+                <button onclick="changeZoom(-0.1)" class="btn-zoom" title="Zoom Out" style="padding: 5px 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">➖</button>
                 <button onclick="resetZoom()" class="btn-zoom" title="Reset 100%" style="padding: 5px 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">↺</button>
                 <span id="zoomDisplay" style="font-weight:bold; color:#555; min-width: 45px;">100%</span>
             </div>
@@ -239,6 +239,42 @@
           <p>Powered by Firebase App Check & reCAPTCHA v3</p>
         </div>
       </div>
+      <!-- DISCLAIMER POPUP -->
+<div id="disclaimerModal" class="modal-overlay">
+  <div class="modal-box" style="max-width:650px;">
+    <h2 style="color:#c53030;">⚠️ Important Disclaimer</h2>
+
+    <p style="font-size:14px; line-height:1.6; color:#333;">
+      This website is a <strong>Hackathon Prototype</strong> developed by 
+      <strong>Team Codewave</strong> to demonstrate an idea for an 
+      <strong>Anonymous Grievance Redressal System</strong>.
+    </p>
+
+    <ul style="font-size:14px; margin-left:18px; color:#444;">
+      <li>This is <strong>NOT</strong> an official Government of India portal.</li>
+      <li>No real complaints are forwarded to government authorities.</li>
+      <li>This platform is created only for educational & demonstration purposes.</li>
+      <li>No personal data (Name, Phone, Email) is collected or stored.</li>
+    </ul>
+
+    <hr style="margin:15px 0;">
+
+    <p style="font-size:13px; color:#2d3748;">
+      <strong>বাংলা:</strong><br>
+      এই ওয়েবসাইটটি একটি <strong>হ্যাকাথন প্রোটোটাইপ</strong>। এটি কোনো
+      সরকারি ওয়েবসাইট নয়। এখানে করা অভিযোগ বাস্তবে কোনো সরকারি দপ্তরে
+      পাঠানো হয় না। এটি শুধুমাত্র আইডিয়া প্রদর্শনের জন্য তৈরি।
+    </p>
+
+    <div style="margin-top:20px; text-align:center;">
+      <button onclick="acceptDisclaimer()" 
+        style="padding:12px 25px; background:#138808; color:white; border:none; border-radius:6px; font-size:15px; cursor:pointer;">
+        ✔ I Understand & Continue
+      </button>
+    </div>
+  </div>
+</div>
+
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
